@@ -1,0 +1,4 @@
+module SitemplateWysihat
+  class Engine < ::Rails::Engine
+  end
+end
