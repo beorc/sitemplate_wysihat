@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Dummy::Application.config.secret_token = 'bef6dc504a6cdbe2e58f7e53f6c1e7f8666817e9aa65ef1120bcec48c3a27617ed0a4906fc3d32460c344caec8e17f93dc103a0cd4c2533eb44baf38fb79dce2'
+Rails3BootstrapDeviseCancan::Application.config.secret_token = 'a6cd68af2c0c93e2f0bd4c576aab509f59b7ae839d02018caa4c8ce3cc46ea012fdc4f1dc93bbb14137bc646fb697907e9649260d02b77eed838717d20dff479'

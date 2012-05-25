@@ -1,0 +1,10 @@
+h1 Users#show
+p Find me in app/views/users/show.html.slim
+p = @user.name
+p = @user.email if @user.email
+
+= simple_form_for @user do |f|
+  fieldset
+    = f.input :biography, as: :sitemplate_rich_editor
+  .form-actions
+    = f.button :submit, :class => 'btn-primary'
