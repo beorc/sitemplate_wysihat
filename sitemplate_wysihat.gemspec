@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 3.2.2"
   # s.add_dependency "jquery-rails"
+  s.add_dependency 'coffee-rails', '~> 3.2.1'
 
   s.add_development_dependency "sqlite3"
 end
