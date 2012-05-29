@@ -10,6 +10,7 @@ PATH
   remote: ../..
   specs:
     sitemplate_wysihat (0.0.1)
+      coffee-rails (~> 3.2.1)
       rails (~> 3.2.2)
 
 GEM

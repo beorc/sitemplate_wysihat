@@ -2,101 +2,94 @@ window.SITEMPLATE = {} unless window.SITEMPLATE
 SITEMPLATE.lib = {} unless SITEMPLATE.lib
 
 window.SITEMPLATE.lib.wysihat =
+
   EditorHandler: class 
     constructor: (editor) ->
       self = @
+      @textarea = editor
       @editor = WysiHat.Editor.attach($(editor))
 
       cfg = 
-        buttons: ['bold', 'italic', 'underline']
+        buttons: ['bold', 'italic', 'underline', 'image']
+        dropdowns: [
+          {
+            name: 'headers',
+            label: 'Headers',
+            options: [
+                { label: "Headers", val: '' },
+                { label: "H1", val: 'H1' },
+                { label: 'H2', val: 'H2' },
+                { label: 'H3', val: 'H3' }
+                ],
+            handler: (editor, val) ->
+                editor.formatblockSelection(val)
+            query: (editor) ->
+          }
+          {
+            name: 'classes',
+            label: 'Classes',
+            options: [
+                { label: "Classes", val: '' },
+                { label: "pull-right", val: 'pull-right' }
+                ]
+            handler: (editor, val) =>
+              selection = window.getSelection()
+              @applyClassToSelection(val)
+            query: (editor) ->
+          }
+        ]
 
       toolbar = new WysiHat.Toolbar()
       toolbar.initialize(@editor)
 
-      @toolbar = @editor.prevAll('.editor_toolbar')
+      @toolbar = @editor.prevAll('.editor_toolbar:first')
 
       $.each cfg.buttons, (i, button) ->
-        toolbar.addButton {label : button}
-        #switch button.toLowerCase()
-          #when 'bold'
-            #toolbar.addButton {label : button, handler: (editor) -> return editor.boldSelection()}
-          #else
-            #toolbar.addButton {label : button}
+        switch button.toLowerCase()
+          when 'bold'
+            toolbar.addButton {label : 'Strong', handler: (editor) -> return editor.boldSelection()}
+          when 'italic'
+            toolbar.addButton {label : 'Italic', handler: (editor) -> return editor.italicSelection()}
+          when 'underline'
+            toolbar.addButton {label : 'Underline', handler: (editor) -> return editor.underlineSelection()}
+          when 'image'
+            toolbar.addButton {label : 'Insert Image', handler: (editor) => return self.insertImageHandler()}
+          else
+            toolbar.addButton {label : button}
 
-      $(@editor).closest('form').submit () ->
-        $(@editor).save()
+      $.each cfg.dropdowns, (i, dropdown) ->
+        toolbar.addDropdown dropdown
+
+      @editor.closest('form:first').submit () =>
+        @save()
 
       # Handlers
 
-      $(window).bind "scroll", (event) -> 
-        self.scrollHandler(event)
+      $(window).bind "scroll", (event) =>
+        @scrollHandler(event)
 
-      boldButton = $('.editor_toolbar .bold').first()
-      boldButton.click (event) ->
-        @editor.boldSelection()
-        return false
-
-      @editor.bind 'wysihat:cursormove', (event) ->
-        if (@editor.boldSelected())
-          boldButton.addClass('selected')
-        else
-          boldButton.removeClass('selected')
-
-      underlineButton = $('.editor_toolbar .underline').first()
-      underlineButton.click (event) ->
-        @editor.underlineSelection()
-        return false
-
-      @editor.bind 'wysihat:cursormove', (event) ->
-        if @editor.underlineSelected()
-          underlineButton.addClassName('selected')
-        else
-          underlineButton.removeClassName('selected')
-
-      italicButton = $('.editor_toolbar .italic').first()
-      italicButton.click (event) ->
-        @editor.italicSelection()
-        return false
-
-      @editor.bind 'wysihat:cursormove', (event) ->
-        if @editor.italicSelected()
-          italicButton.addClassName('selected')
-        else
-          italicButton.removeClassName('selected')
-
-      imageButton = $('.editor_toolbar .image').first()
-      imageButton.click (event) ->
-        sel = window.getSelection()
-        return if sel.rangeCount < 1
-        range = sel.getRangeAt(0)
-
-        startNode = range.startContainer
-        if $(startNode).hasClass('editor')
-          @editor.insertHTML('<div><img src="http:www.whatever.com/myimage.gif"></div>')
-        else
-          @editor.insertImage("http:www.whatever.com/myimage.gif")
-        return false
-
-      pullRightButton = $('.editor_toolbar .right').first()
-      pullRightButton.click (event) ->
-        selection = window.getSelection()
-        class_name = 'pull-right'
-
-        applyClassToSelection(class_name)
-        
-        return false
-
-            
     scrollHandler: (event) ->
       if @needFixToolbar()
         @toolbar.css {
           position: 'fixed',
-          top: '10%',
+          top: '7%',
         }
       else
         @toolbar.css {
           position: 'static'
         }
+
+    insertImageHandler: () ->
+      sel = window.getSelection()
+      return if sel.rangeCount < 1
+      range = sel.getRangeAt(0)
+
+      startNode = range.startContainer
+      if $(startNode).hasClass('editor')
+        @editor.insertHTML('<div><img src="http://www.whatever.com/myimage.gif"></div>')
+      else
+        @editor.insertImage("http://www.whatever.com/myimage.gif")
+      return false
 
     needFixToolbar: () ->
       static_offset = 70
@@ -112,7 +105,6 @@ window.SITEMPLATE.lib.wysihat =
       toolbar_too_high = false
 
       delta = 10
-      #toolbar_too_high = (elemTop < docViewTop) && (elemBottom > docViewTop)
       if ('static' == toolbar_state)
         toolbar_too_high = (elemTop < (docViewTop + delta)) && (elemBottom > (docViewTop + delta))
       else
@@ -121,6 +113,19 @@ window.SITEMPLATE.lib.wysihat =
       #$('#debug').text(elemTop+'<'+docViewTop+' and '+elemBottom+'>'+docViewTop)
 
       return toolbar_too_high
+
+    toggleClassOnSelection: (cssClass) ->
+      sel = window.getSelection()
+      if (sel.rangeCount < 1)
+          return
+      
+      range = sel.getRangeAt(0)
+
+      startNode = range.startContainer
+      endNode = range.endContainer
+
+      if !$(startNode).hasClass(cssClass) || !$(endNode).hasClass(cssNode)
+        applyClassToSelection(cssClass)
 
     applyClassToSelection: (cssClass) ->
       rangeIntersectsNode = (range, node) ->
@@ -143,7 +148,7 @@ window.SITEMPLATE.lib.wysihat =
          node = sel.focusNode
         if (!$(node).hasClass('editor'))
           if (node.nodeType != 1)
-            $(node).wrap('<div class="'+ cssClass +'"/>')
+            $(node).wrap("<div class='#{cssClass}'/>")
           else
             $(node).addClass(cssClass)
         return
@@ -195,6 +200,35 @@ window.SITEMPLATE.lib.wysihat =
 
           $(wrapper).addClass(cssClass)
 
+    removeClass: (cssClass) ->
+      #spans = $(".#{cssClass}")
+
+      ## Convert spans to an array to prevent live updating of
+      ## the list as we remove the spans
+      #spans = Array.prototype.slice.call(spans, 0);
+
+      #for (var i = 0, len = spans.length; i < len; ++i)
+        #span = spans[i];
+        #parentNode = span.parentNode;
+        #parentNode.insertBefore(span.firstChild, span);
+        #parentNode.removeChild(span);
+
+        ## Glue any adjacent text nodes back together
+        #parentNode.normalize();
+
+    content: () ->
+      return @editor.html()
+
+    setContent: (text) ->
+      return @editor.html(text)
+
+    save: () ->
+      @textarea.value = @content()
+
+    load: () ->
+      @setContent(@textarea.value)
+
+
   EDITOR_SELECTOR: '.sitemplate-rich-editor'
 
   instances: []
@@ -207,3 +241,4 @@ window.SITEMPLATE.lib.wysihat =
   init: () ->
     if ($(SITEMPLATE.lib.wysihat.EDITOR_SELECTOR).length > 0)
       $.getScript '/assets/jq-wysihat.js', SITEMPLATE.lib.wysihat.attach
+
