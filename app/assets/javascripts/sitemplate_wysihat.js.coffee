@@ -10,7 +10,54 @@ window.SITEMPLATE.lib.wysihat =
       @editor = WysiHat.Editor.attach($(editor))
 
       cfg = 
-        buttons: ['bold', 'italic', 'underline', 'image']
+        buttons: [
+          {
+            name: 'bold',
+            label: 'Bold',
+            handler: (editor) ->
+              editor.boldSelection()
+            query: (editor) ->
+              editor.boldSelected()
+          }
+          {
+            name: 'italic',
+            label: 'Italic',
+            handler: (editor) ->
+              editor.italicSelection()
+            query: (editor) ->
+              editor.italicSelected()
+          }
+          {
+            name: 'underline',
+            label: 'Underline',
+            handler: (editor) ->
+              editor.underlineSelection()
+            query: (editor) ->
+              editor.underlineSelected()
+          }
+          {
+            name: 'ol',
+            label: 'Ordered list',
+            handler: (editor) ->
+              editor.toggleOrderedList()
+            query: (editor) ->
+              editor.unorderedListSelected()
+          }
+          {
+            name: 'ul',
+            label: 'Unordered list',
+            handler: (editor) ->
+              editor.toggleUnorderedList()
+            query: (editor) ->
+              editor.orderedListSelected()
+          }
+          {
+            name: 'image',
+            label: 'Insert image',
+            handler: (editor) ->
+              self.insertImageHandler()
+          }
+        ]
         dropdowns: [
           {
             name: 'headers',
@@ -20,22 +67,40 @@ window.SITEMPLATE.lib.wysihat =
                 { label: "H1", val: 'H1' },
                 { label: 'H2', val: 'H2' },
                 { label: 'H3', val: 'H3' }
-                ],
+            ],
             handler: (editor, val) ->
                 editor.formatblockSelection(val)
-            query: (editor) ->
           }
           {
-            name: 'classes',
-            label: 'Classes',
+            name: 'blocks',
+            label: 'Blocks',
             options: [
-                { label: "Classes", val: '' },
-                { label: "pull-right", val: 'pull-right' }
-                ]
-            handler: (editor, val) =>
-              selection = window.getSelection()
-              @applyClassToSelection(val)
-            query: (editor) ->
+                { label: "Blocks", val: '' },
+                { label: "Block left", val: 0 }
+                { label: "Block center", val: 1 }
+                { label: "Block right", val: 2 }
+            ]
+            handler: (editor, val) ->
+              classes = ['pull-left', 'pull-center', 'pull-right']
+              if val != ''
+                self.toggleClassOnSelection(classes, classes[val])
+              else
+                self.toggleClassOnSelection(classes, '')
+          }
+          {
+            name: 'inlines',
+            label: 'Inlines',
+            options: [
+                { label: "Inlines", val: '' },
+                { label: "Inline left", val: 0 }
+                { label: "Inline right", val: 1 }
+            ]
+            handler: (editor, val) ->
+              classes = ['pull-left', 'pull-right']
+              if val != ''
+                self.toggleClassOnSelection(classes, classes[val])
+              else
+                self.toggleClassOnSelection(classes, '')
           }
         ]
 
@@ -45,17 +110,7 @@ window.SITEMPLATE.lib.wysihat =
       @toolbar = @editor.prevAll('.editor_toolbar:first')
 
       $.each cfg.buttons, (i, button) ->
-        switch button.toLowerCase()
-          when 'bold'
-            toolbar.addButton {label : 'Strong', handler: (editor) -> return editor.boldSelection()}
-          when 'italic'
-            toolbar.addButton {label : 'Italic', handler: (editor) -> return editor.italicSelection()}
-          when 'underline'
-            toolbar.addButton {label : 'Underline', handler: (editor) -> return editor.underlineSelection()}
-          when 'image'
-            toolbar.addButton {label : 'Insert Image', handler: (editor) => return self.insertImageHandler()}
-          else
-            toolbar.addButton {label : button}
+        toolbar.addButton button
 
       $.each cfg.dropdowns, (i, dropdown) ->
         toolbar.addDropdown dropdown
@@ -114,30 +169,17 @@ window.SITEMPLATE.lib.wysihat =
 
       return toolbar_too_high
 
-    toggleClassOnSelection: (cssClass) ->
-      sel = window.getSelection()
-      if (sel.rangeCount < 1)
-          return
-      
-      range = sel.getRangeAt(0)
+    rangeIntersectsNode: (range, node) ->
+      nodeRange = node.ownerDocument.createRange()
+      try
+        nodeRange.selectNode(node)
+      catch e
+        nodeRange.selectNodeContents(node)
 
-      startNode = range.startContainer
-      endNode = range.endContainer
+      return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
+             range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
 
-      if !$(startNode).hasClass(cssClass) || !$(endNode).hasClass(cssNode)
-        applyClassToSelection(cssClass)
-
-    applyClassToSelection: (cssClass) ->
-      rangeIntersectsNode = (range, node) ->
-        nodeRange = node.ownerDocument.createRange()
-        try
-          nodeRange.selectNode(node)
-        catch e
-          nodeRange.selectNodeContents(node)
-
-        return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
-               range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
-
+    toggleClassOnSelection: (removeClasses, addClass) ->
       sel = window.getSelection()
       if (sel.rangeCount < 1)
           return
@@ -145,25 +187,19 @@ window.SITEMPLATE.lib.wysihat =
       range = sel.getRangeAt(0)
 
       if (range.collapsed)
-         node = sel.focusNode
-        if (!$(node).hasClass('editor'))
+        node = sel.focusNode
+        if !$(node).hasClass('editor')
+          $.each removeClasses, (i, name) ->
+            $(node).removeClass(name)
+
           if (node.nodeType != 1)
-            $(node).wrap("<div class='#{cssClass}'/>")
+            $(node).wrap("<div class='#{addClass}'/>")
           else
-            $(node).addClass(cssClass)
+            $(node).toggleClass(addClass)
         return
 
       startNode = range.startContainer
       endNode = range.endContainer
-
-      #Split the start and end container text nodes, if necessary
-      if (endNode.nodeType == 3)
-        endNode.splitText(range.endOffset)
-        range.setEnd(endNode, endNode.length)
-
-      if (startNode.nodeType == 3)
-        startNode = startNode.splitText(range.startOffset)
-        range.setStart(startNode, 0)
 
       #Create an array of all the text nodes in the selection
       #using a TreeWalker
@@ -172,14 +208,14 @@ window.SITEMPLATE.lib.wysihat =
         containerElement = containerElement.parentNode
 
       treeWalker = document.createTreeWalker containerElement,
-                                             NodeFilter.SHOW_ALL,
-                                             (node) ->
-                                               return if rangeIntersectsNode(range, node)
-                                                        NodeFilter.FILTER_ACCEPT
-                                                      else
-                                                        NodeFilter.FILTER_REJECT
-                                             ,
-                                             false
+         NodeFilter.SHOW_ALL,
+         (node) ->
+           return if self.rangeIntersectsNode(range, node)
+                    NodeFilter.FILTER_ACCEPT
+                  else
+                    NodeFilter.FILTER_REJECT
+         ,
+         false
 
       selectedNodes = []
       while (treeWalker.nextNode())
@@ -188,33 +224,17 @@ window.SITEMPLATE.lib.wysihat =
       #Place each text node within range inside a <span>
       #element with the desired class
       for node in selectedNodes
-        if (node.nodeType == 3)
-          span = document.createElement("span")
-          span.className = cssClass
-          node.parentNode.insertBefore(span, node)
-          span.appendChild(node)
+        $.each removeClasses, (i, name) ->
+          $(node).removeClass(name)
+
+        wrapper = node
+        while (wrapper.parentNode && wrapper.parentNode != range.commonAncestorContainer)
+          wrapper = wrapper.parentNode
+
+        if (wrapper.nodeType != 1)
+          $(wrapper).wrap("<div class='#{addClass}'/>")
         else
-          wrapper = node
-          while (wrapper.parentNode && wrapper.parentNode != range.commonAncestorContainer)
-            wrapper = wrapper.parentNode
-
-          $(wrapper).addClass(cssClass)
-
-    removeClass: (cssClass) ->
-      #spans = $(".#{cssClass}")
-
-      ## Convert spans to an array to prevent live updating of
-      ## the list as we remove the spans
-      #spans = Array.prototype.slice.call(spans, 0);
-
-      #for (var i = 0, len = spans.length; i < len; ++i)
-        #span = spans[i];
-        #parentNode = span.parentNode;
-        #parentNode.insertBefore(span.firstChild, span);
-        #parentNode.removeChild(span);
-
-        ## Glue any adjacent text nodes back together
-        #parentNode.normalize();
+          $(wrapper).toggleClass(addClass)
 
     content: () ->
       return @editor.html()
