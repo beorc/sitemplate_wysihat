@@ -30,3 +30,20 @@
   font: 18px helvetica, arial, sans-serif;
   color: red;
 }
+
+.editor .block-left {
+  text-align: left;
+}
+.editor .block-center {
+  text-align: center;
+}
+.editor .block-right {
+  text-align: right;
+}
+
+.editor .inline-left {
+  float: left;
+}
+.editor .inline-right {
+  float: right;
+}

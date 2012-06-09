@@ -2,120 +2,152 @@ window.SITEMPLATE = {} unless window.SITEMPLATE
 SITEMPLATE.lib = {} unless SITEMPLATE.lib
 
 window.SITEMPLATE.lib.wysihat =
+  cfg:
+    buttons: {
+      bold: {
+        name: 'bold',
+        label: 'Bold',
+        handler: (editor) ->
+          editor.boldSelection()
+        query: (editor) ->
+          editor.boldSelected()
+      }
+      italic: {
+        name: 'italic',
+        label: 'Italic',
+        handler: (editor) ->
+          editor.italicSelection()
+        query: (editor) ->
+          editor.italicSelected()
+      }
+      underline: {
+        name: 'underline',
+        label: 'Underline',
+        handler: (editor) ->
+          editor.underlineSelection()
+        query: (editor) ->
+          editor.underlineSelected()
+      }
+      ol: {
+        name: 'ol',
+        label: 'Ordered list',
+        handler: (editor) ->
+          editor.toggleOrderedList()
+        query: (editor) ->
+          editor.unorderedListSelected()
+      }
+      ul: {
+        name: 'ul',
+        label: 'Unordered list',
+        handler: (editor) ->
+          editor.toggleUnorderedList()
+        query: (editor) ->
+          editor.orderedListSelected()
+      }
+      link: {
+        name: 'link',
+        label: 'Link',
+        handler: (editor) ->
+          editor.handler.cfg.options.linkHandler(editor)
+      }
+      image: {
+        name: 'image',
+        label: 'Insert image',
+        handler: (editor) ->
+          editor.handler.cfg.options.insertImageHandler(editor)
+      }
+    }
+    dropdowns: [
+      {
+        name: 'headers',
+        label: 'Headers',
+        options: [
+            { label: "Headers", val: '' },
+            { label: "H1", val: 'H1' },
+            { label: 'H2', val: 'H2' },
+            { label: 'H3', val: 'H3' }
+        ],
+        handler: (editor, val) ->
+            editor.formatblockSelection(val)
+      }
+      {
+        name: 'blocks',
+        label: 'Blocks',
+        options: [
+            { label: "Blocks", val: '' },
+            { label: "Block left", val: 0 }
+            { label: "Block center", val: 1 }
+            { label: "Block right", val: 2 }
+        ]
+        handler: (editor, val) ->
+          classes = ['block-left', 'block-center', 'block-right']
+          if val != ''
+            editor.handler.toggleClassOnSelection(classes, classes[val])
+          else
+            editor.handler.toggleClassOnSelection(classes, '')
+      }
+      {
+        name: 'inlines',
+        label: 'Inlines',
+        options: [
+            { label: "Inlines", val: '' },
+            { label: "Inline left", val: 0 }
+            { label: "Inline right", val: 1 }
+        ]
+        handler: (editor, val) ->
+          classes = ['inline-left', 'inline-right']
+          if val != ''
+            editor.handler.toggleClassOnSelection(classes, classes[val])
+          else
+            editor.handler.toggleClassOnSelection(classes, '')
+      }
+    ]
+    options:
+      insertImageHandler: (editor) ->
+        value = prompt("Enter image URL", "http://www.whatever.com/myimage.gif")
+        if value
+          editor.handler.insertImage(value)
+
+      linkHandler: (editor) ->
+        if editor.linkSelected()
+          if confirm("Remove link?")
+            editor.unlinkSelection()
+        else
+          value = prompt("Enter a URL", "")
+          if value
+            editor.linkSelection(value)
 
   EditorHandler: class 
-    constructor: (editor) ->
+    constructor: (editor, cfg) ->
       self = @
       @textarea = editor
       @editor = WysiHat.Editor.attach($(editor))
+      @editor.handler = self
+      self.cfg = cfg
 
-      cfg = 
-        buttons: [
-          {
-            name: 'bold',
-            label: 'Bold',
-            handler: (editor) ->
-              editor.boldSelection()
-            query: (editor) ->
-              editor.boldSelected()
-          }
-          {
-            name: 'italic',
-            label: 'Italic',
-            handler: (editor) ->
-              editor.italicSelection()
-            query: (editor) ->
-              editor.italicSelected()
-          }
-          {
-            name: 'underline',
-            label: 'Underline',
-            handler: (editor) ->
-              editor.underlineSelection()
-            query: (editor) ->
-              editor.underlineSelected()
-          }
-          {
-            name: 'ol',
-            label: 'Ordered list',
-            handler: (editor) ->
-              editor.toggleOrderedList()
-            query: (editor) ->
-              editor.unorderedListSelected()
-          }
-          {
-            name: 'ul',
-            label: 'Unordered list',
-            handler: (editor) ->
-              editor.toggleUnorderedList()
-            query: (editor) ->
-              editor.orderedListSelected()
-          }
-          {
-            name: 'image',
-            label: 'Insert image',
-            handler: (editor) ->
-              self.insertImageHandler()
-          }
-        ]
-        dropdowns: [
-          {
-            name: 'headers',
-            label: 'Headers',
-            options: [
-                { label: "Headers", val: '' },
-                { label: "H1", val: 'H1' },
-                { label: 'H2', val: 'H2' },
-                { label: 'H3', val: 'H3' }
-            ],
-            handler: (editor, val) ->
-                editor.formatblockSelection(val)
-          }
-          {
-            name: 'blocks',
-            label: 'Blocks',
-            options: [
-                { label: "Blocks", val: '' },
-                { label: "Block left", val: 0 }
-                { label: "Block center", val: 1 }
-                { label: "Block right", val: 2 }
-            ]
-            handler: (editor, val) ->
-              classes = ['pull-left', 'pull-center', 'pull-right']
-              if val != ''
-                self.toggleClassOnSelection(classes, classes[val])
-              else
-                self.toggleClassOnSelection(classes, '')
-          }
-          {
-            name: 'inlines',
-            label: 'Inlines',
-            options: [
-                { label: "Inlines", val: '' },
-                { label: "Inline left", val: 0 }
-                { label: "Inline right", val: 1 }
-            ]
-            handler: (editor, val) ->
-              classes = ['pull-left', 'pull-right']
-              if val != ''
-                self.toggleClassOnSelection(classes, classes[val])
-              else
-                self.toggleClassOnSelection(classes, '')
-          }
-        ]
+      @editor.addClass 'clearfix'
 
       toolbar = new WysiHat.Toolbar()
       toolbar.initialize(@editor)
 
       @toolbar = @editor.prevAll('.editor_toolbar:first')
 
-      $.each cfg.buttons, (i, button) ->
-        toolbar.addButton button
+      for name, button of cfg.buttons
+        toolbar.addButton button if button
 
-      $.each cfg.dropdowns, (i, dropdown) ->
-        toolbar.addDropdown dropdown
+      for name, dropdown of cfg.dropdowns
+        toolbar.addDropdown dropdown if dropdown
 
-      @editor.closest('form:first').submit () =>
+      @dynamic_toolbar = @toolbar.clone()
+      @dynamic_toolbar.appendTo('body')
+      @dynamic_toolbar.css {
+          position: 'fixed',
+          top: '10%',
+          left: @toolbar.offset().left
+          display: 'none'
+      }
+
+      @editor.parents('form:first').submit () =>
         @save()
 
       # Handlers
@@ -123,63 +155,70 @@ window.SITEMPLATE.lib.wysihat =
       $(window).bind "scroll", (event) =>
         @scrollHandler(event)
 
+      @editor.on 'click', '*', () ->
+        self.editor.find('.selected').removeClass('selected')
+        $(@).addClass('selected') if $(@).hasClass('selectable')
+
+      @editor[0].onkeyup = () ->
+        self.editor.find('.selected').removeClass('selected')
+
     scrollHandler: (event) ->
       if @needFixToolbar()
-        @toolbar.css {
-          position: 'fixed',
-          top: '7%',
+        @dynamic_toolbar.css {
+          display: 'block'
         }
       else
-        @toolbar.css {
-          position: 'static'
+        @dynamic_toolbar.css {
+          display: 'none'
         }
 
-    insertImageHandler: () ->
-      sel = window.getSelection()
-      return if sel.rangeCount < 1
-      range = sel.getRangeAt(0)
-
-      startNode = range.startContainer
-      if $(startNode).hasClass('editor')
-        @editor.insertHTML('<div><img src="http://www.whatever.com/myimage.gif"></div>')
-      else
-        @editor.insertImage("http://www.whatever.com/myimage.gif")
+    insertImage: (url) ->
+      @editor.insertImage(url)
+      $('.editor img').addClass 'selectable'
+      #sel = window.getSelection()
+      #return if sel.rangeCount < 1
+      #range = sel.getRangeAt(0)
+      #startNode = range.startContainer
+      #if $(startNode).hasClass('editor')
+        #@editor.insertHTML("<div><img src=#{url}></div>")
+      #else
+        #@editor.insertImage(url)
       return false
 
     needFixToolbar: () ->
-      static_offset = 70
-      elem = $(@editor)
-      toolbar = $(@toolbar)
-      toolbar_state = toolbar.css('position')
+      static_offset = @toolbar.height()
+      elem = @editor
       docViewTop = static_offset + $(window).scrollTop()
       docViewBottom = static_offset + docViewTop + $(window).height()
 
-      elemTop = $(elem).offset().top
-      elemBottom = elemTop + $(elem).height()
+      elemTop = elem.offset().top
+      elemBottom = elemTop + elem.height()
 
-      toolbar_too_high = false
-
-      delta = 10
-      if ('static' == toolbar_state)
-        toolbar_too_high = (elemTop < (docViewTop + delta)) && (elemBottom > (docViewTop + delta))
-      else
-        toolbar_too_high = (elemTop < (docViewTop - delta)) && (elemBottom > (docViewTop - delta))
+      toolbar_too_high = (elemTop < docViewTop) && (elemBottom > docViewTop)
         
-      #$('#debug').text(elemTop+'<'+docViewTop+' and '+elemBottom+'>'+docViewTop)
+      #console.log elemTop+'<'+docViewTop+' and '+elemBottom+'>'+docViewTop
 
       return toolbar_too_high
 
-    rangeIntersectsNode: (range, node) ->
-      nodeRange = node.ownerDocument.createRange()
-      try
-        nodeRange.selectNode(node)
-      catch e
-        nodeRange.selectNodeContents(node)
-
-      return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
-             range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
-
     toggleClassOnSelection: (removeClasses, addClass) ->
+      rangeIntersectsNode = (range, node) ->
+        nodeRange = node.ownerDocument.createRange()
+        try
+          nodeRange.selectNode(node)
+        catch e
+          nodeRange.selectNodeContents(node)
+
+        return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
+               range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
+
+      selected = @editor.find('.selected')
+      if selected.length > 0
+        $.each removeClasses, (i, name) ->
+          selected.removeClass(name)
+
+        selected.toggleClass(addClass)
+        return
+
       sel = window.getSelection()
       if (sel.rangeCount < 1)
           return
@@ -210,7 +249,7 @@ window.SITEMPLATE.lib.wysihat =
       treeWalker = document.createTreeWalker containerElement,
          NodeFilter.SHOW_ALL,
          (node) ->
-           return if self.rangeIntersectsNode(range, node)
+           return if rangeIntersectsNode(range, node)
                     NodeFilter.FILTER_ACCEPT
                   else
                     NodeFilter.FILTER_REJECT
@@ -221,8 +260,6 @@ window.SITEMPLATE.lib.wysihat =
       while (treeWalker.nextNode())
         selectedNodes.push(treeWalker.currentNode)
 
-      #Place each text node within range inside a <span>
-      #element with the desired class
       for node in selectedNodes
         $.each removeClasses, (i, name) ->
           $(node).removeClass(name)
@@ -253,12 +290,23 @@ window.SITEMPLATE.lib.wysihat =
 
   instances: []
 
-  attach: () ->
-    $(SITEMPLATE.lib.wysihat.EDITOR_SELECTOR).each (i, editor) ->
-      handler = new SITEMPLATE.lib.wysihat.EditorHandler editor
+  attach: (editors, cfg) ->
+    editors.each (i, editor) ->
+      handler = new SITEMPLATE.lib.wysihat.EditorHandler(editor, cfg)
       SITEMPLATE.lib.wysihat.instances.push(handler)
 
-  init: () ->
+  attachAll: (cfg) ->
+    SITEMPLATE.lib.wysihat.attach($(SITEMPLATE.lib.wysihat.EDITOR_SELECTOR), cfg)
+
+  initAll: (cfg) ->
     if ($(SITEMPLATE.lib.wysihat.EDITOR_SELECTOR).length > 0)
-      $.getScript '/assets/jq-wysihat.js', SITEMPLATE.lib.wysihat.attach
+      $.getScript '/assets/jq-wysihat.js', () ->
+        cfg = SITEMPLATE.lib.wysihat.cfg unless cfg
+        SITEMPLATE.lib.wysihat.attachAll(cfg)
+
+  init: (editors, cfg) ->
+    if (editors.length > 0)
+      $.getScript '/assets/jq-wysihat.js', () ->
+        cfg = SITEMPLATE.lib.wysihat.cfg unless cfg
+        SITEMPLATE.lib.wysihat.attach(editors, cfg)
 
