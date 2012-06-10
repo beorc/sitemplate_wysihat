@@ -57,8 +57,8 @@ window.SITEMPLATE.lib.wysihat =
           editor.handler.cfg.options.insertImageHandler(editor)
       }
     }
-    dropdowns: [
-      {
+    dropdowns: {
+      headers: {
         name: 'headers',
         label: 'Headers',
         options: [
@@ -70,7 +70,7 @@ window.SITEMPLATE.lib.wysihat =
         handler: (editor, val) ->
             editor.formatblockSelection(val)
       }
-      {
+      blocks: {
         name: 'blocks',
         label: 'Blocks',
         options: [
@@ -86,7 +86,7 @@ window.SITEMPLATE.lib.wysihat =
           else
             editor.handler.toggleClassOnSelection(classes, '')
       }
-      {
+      inlines: {
         name: 'inlines',
         label: 'Inlines',
         options: [
@@ -101,7 +101,7 @@ window.SITEMPLATE.lib.wysihat =
           else
             editor.handler.toggleClassOnSelection(classes, '')
       }
-    ]
+    }
     options:
       insertImageHandler: (editor) ->
         value = prompt("Enter image URL", "http://www.whatever.com/myimage.gif")
@@ -124,6 +124,7 @@ window.SITEMPLATE.lib.wysihat =
       @editor = WysiHat.Editor.attach($(editor))
       @editor.handler = self
       self.cfg = cfg
+      @load()
 
       @editor.addClass 'clearfix'
 
@@ -138,14 +139,14 @@ window.SITEMPLATE.lib.wysihat =
       for name, dropdown of cfg.dropdowns
         toolbar.addDropdown dropdown if dropdown
 
-      @dynamic_toolbar = @toolbar.clone()
-      @dynamic_toolbar.appendTo('body')
-      @dynamic_toolbar.css {
-          position: 'fixed',
-          top: '10%',
-          left: @toolbar.offset().left
-          display: 'none'
-      }
+      @toolbar_placeholder = $('<div/>').
+        addClass('placeholder').
+        css {
+          height: @toolbar.height()
+        }
+
+      @editor.before @toolbar_placeholder
+      @toolbar.appendTo @toolbar_placeholder
 
       @editor.parents('form:first').submit () =>
         @save()
@@ -164,12 +165,13 @@ window.SITEMPLATE.lib.wysihat =
 
     scrollHandler: (event) ->
       if @needFixToolbar()
-        @dynamic_toolbar.css {
-          display: 'block'
+        @toolbar.css {
+          position: 'fixed',
+          top: $('header').height()
         }
       else
-        @dynamic_toolbar.css {
-          display: 'none'
+        @toolbar.css {
+          position: 'static'
         }
 
     insertImage: (url) ->
@@ -186,12 +188,12 @@ window.SITEMPLATE.lib.wysihat =
       return false
 
     needFixToolbar: () ->
-      static_offset = @toolbar.height()
+      static_offset = $('header').height()
       elem = @editor
       docViewTop = static_offset + $(window).scrollTop()
       docViewBottom = static_offset + docViewTop + $(window).height()
 
-      elemTop = elem.offset().top
+      elemTop = @toolbar_placeholder.offset().top
       elemBottom = elemTop + elem.height()
 
       toolbar_too_high = (elemTop < docViewTop) && (elemBottom > docViewTop)
