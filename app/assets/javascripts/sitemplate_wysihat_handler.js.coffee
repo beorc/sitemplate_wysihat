@@ -6,7 +6,12 @@ window.SITEMPLATE.lib.wysihat =
     buttons: {
       bold: {
         name: 'bold',
-        label: 'Bold',
+        label: '<i class="icon-bold"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Bold')
+            button.tooltip()
         handler: (editor) ->
           editor.boldSelection()
         query: (editor) ->
@@ -14,7 +19,12 @@ window.SITEMPLATE.lib.wysihat =
       }
       italic: {
         name: 'italic',
-        label: 'Italic',
+        label: '<i class="icon-italic"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Italic')
+            button.tooltip()
         handler: (editor) ->
           editor.italicSelection()
         query: (editor) ->
@@ -22,7 +32,12 @@ window.SITEMPLATE.lib.wysihat =
       }
       underline: {
         name: 'underline',
-        label: 'Underline',
+        label: '<i class="icon-pencil"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Underline')
+            button.tooltip()
         handler: (editor) ->
           editor.underlineSelection()
         query: (editor) ->
@@ -30,7 +45,12 @@ window.SITEMPLATE.lib.wysihat =
       }
       ol: {
         name: 'ol',
-        label: 'Ordered list',
+        label: '<i class="icon-th-list"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Ordered list')
+            button.tooltip()
         handler: (editor) ->
           editor.toggleOrderedList()
         query: (editor) ->
@@ -38,7 +58,12 @@ window.SITEMPLATE.lib.wysihat =
       }
       ul: {
         name: 'ul',
-        label: 'Unordered list',
+        label: '<i class="icon-list"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Unordered list')
+            button.tooltip()
         handler: (editor) ->
           editor.toggleUnorderedList()
         query: (editor) ->
@@ -46,60 +71,121 @@ window.SITEMPLATE.lib.wysihat =
       }
       link: {
         name: 'link',
-        label: 'Link',
+        label: '<i class="icon-globe"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Link')
+            button.tooltip()
         handler: (editor) ->
           editor.handler.cfg.options.linkHandler(editor)
       }
       image: {
         name: 'image',
-        label: 'Insert image',
+        label: '<i class="icon-picture"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Image')
+            button.tooltip()
+            button.after('<span class="divider-vertical"/>')
         handler: (editor) ->
           editor.handler.cfg.options.insertImageHandler(editor)
       }
-    }
-    dropdowns: {
-      headers: {
-        name: 'headers',
-        label: 'Headers',
-        options: [
-            { label: "Headers", val: '' },
-            { label: "H1", val: 'H1' },
-            { label: 'H2', val: 'H2' },
-            { label: 'H3', val: 'H3' }
-        ],
-        handler: (editor, val) ->
-            editor.formatblockSelection(val)
+      h1: {
+        name: 'h1',
+        label: '<i class="icon-certificate"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Header 1')
+            button.tooltip()
+        handler: (editor) ->
+          editor.formatblockSelection('H1')
       }
-      blocks: {
-        name: 'blocks',
-        label: 'Blocks',
-        options: [
-            { label: "Blocks", val: '' },
-            { label: "Block left", val: 0 }
-            { label: "Block center", val: 1 }
-            { label: "Block right", val: 2 }
-        ]
-        handler: (editor, val) ->
+      h2: {
+        name: 'h2',
+        label: '<i class="icon-certificate"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Header 2')
+            button.tooltip()
+        handler: (editor) ->
+          editor.formatblockSelection('H2')
+      }
+      h3: {
+        name: 'h3',
+        label: '<i class="icon-certificate"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Header 3')
+            button.tooltip()
+            button.after('<span class="divider-vertical"/>')
+        handler: (editor) ->
+          editor.formatblockSelection('H3')
+      }
+      block_left: {
+        name: 'block_left',
+        label: '<i class="icon-align-left"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Left block')
+            button.tooltip()
+        handler: (editor) ->
           classes = ['block-left', 'block-center', 'block-right']
-          if val != ''
-            editor.handler.toggleClassOnSelection(classes, classes[val])
-          else
-            editor.handler.toggleClassOnSelection(classes, '')
+          editor.handler.toggleClassOnSelection(classes, classes[0])
       }
-      inlines: {
-        name: 'inlines',
-        label: 'Inlines',
-        options: [
-            { label: "Inlines", val: '' },
-            { label: "Inline left", val: 0 }
-            { label: "Inline right", val: 1 }
-        ]
-        handler: (editor, val) ->
+      block_center: {
+        name: 'block_center',
+        label: '<i class="icon-align-center"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Center block')
+            button.tooltip()
+        handler: (editor) ->
+          classes = ['block-left', 'block-center', 'block-right']
+          editor.handler.toggleClassOnSelection(classes, classes[1])
+      }
+      block_right: {
+        name: 'block_right',
+        label: '<i class="icon-align-right"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Right block')
+            button.tooltip()
+            button.after('<span class="divider-vertical"/>')
+        handler: (editor) ->
+          classes = ['block-left', 'block-center', 'block-right']
+          editor.handler.toggleClassOnSelection(classes, classes[2])
+      }
+      inline_left: {
+        name: 'inline_left',
+        label: '<i class="icon-align-left"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Left inline')
+            button.tooltip()
+        handler: (editor) ->
           classes = ['inline-left', 'inline-right']
-          if val != ''
-            editor.handler.toggleClassOnSelection(classes, classes[val])
-          else
-            editor.handler.toggleClassOnSelection(classes, '')
+          editor.handler.toggleClassOnSelection(classes, classes[0])
+      }
+      inline_right: {
+        name: 'inline_right',
+        label: '<i class="icon-align-right"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Right inline')
+            button.tooltip()
+        handler: (editor) ->
+          classes = ['inline-left', 'inline-right']
+          editor.handler.toggleClassOnSelection(classes, classes[1])
       }
     }
     options:
@@ -135,6 +221,8 @@ window.SITEMPLATE.lib.wysihat =
 
       for name, button of cfg.buttons
         toolbar.addButton button if button
+        if button.init
+          button.init @toolbar.children('.button:last')
 
       for name, dropdown of cfg.dropdowns
         toolbar.addDropdown dropdown if dropdown
