@@ -355,7 +355,7 @@ window.SITEMPLATE.lib.wysihat =
           $(node).removeClass(name)
 
         wrapper = node
-        while (wrapper.parentNode && wrapper.parentNode != range.commonAncestorContainer)
+        while (wrapper.parentNode && wrapper.parentNode != containerElement)
           wrapper = wrapper.parentNode
 
         if (wrapper.nodeType != 1)
