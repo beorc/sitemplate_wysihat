@@ -31,6 +31,12 @@
   color: red;
 }
 
+.editor img.selected {
+   padding:1px;
+   border:1px solid #021a40;
+   background-color:#ff0;
+}
+
 .editor .block-left {
   text-align: left;
 }

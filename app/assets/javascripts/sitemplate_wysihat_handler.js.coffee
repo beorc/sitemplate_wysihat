@@ -247,6 +247,7 @@ window.SITEMPLATE.lib.wysihat =
       @editor.on 'click', '*', () ->
         self.editor.find('.selected').removeClass('selected')
         $(@).addClass('selected') if $(@).hasClass('selectable')
+        false
 
       @editor[0].onkeyup = () ->
         self.editor.find('.selected').removeClass('selected')
@@ -301,8 +302,14 @@ window.SITEMPLATE.lib.wysihat =
         return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
                range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
 
-      selected = @editor.find('.selected')
+      selected = @editor.find('.selected:first')
       if selected.length > 0
+        wrapper = selected
+        while (wrapper.parent() && !wrapper.parent().hasClass('editor'))
+          wrapper = wrapper.parent()
+
+        wrapper.after selected if wrapper!=selected
+
         $.each removeClasses, (i, name) ->
           selected.removeClass(name)
 
