@@ -102,6 +102,8 @@ window.SITEMPLATE.lib.wysihat =
             button.tooltip()
         handler: (editor) ->
           editor.formatblockSelection('H1')
+        query: (editor) ->
+          editor.handler.tagSelected('H1')
       }
       h2: {
         name: 'h2',
@@ -113,6 +115,8 @@ window.SITEMPLATE.lib.wysihat =
             button.tooltip()
         handler: (editor) ->
           editor.formatblockSelection('H2')
+        query: (editor) ->
+          editor.handler.tagSelected('H2')
       }
       h3: {
         name: 'h3',
@@ -125,6 +129,8 @@ window.SITEMPLATE.lib.wysihat =
             button.after('<span class="divider-vertical"/>')
         handler: (editor) ->
           editor.formatblockSelection('H3')
+        query: (editor) ->
+          editor.handler.tagSelected('H3')
       }
       block_left: {
         name: 'block_left',
@@ -137,6 +143,8 @@ window.SITEMPLATE.lib.wysihat =
         handler: (editor) ->
           classes = ['block-left', 'block-center', 'block-right']
           editor.handler.toggleClassOnSelection(classes, classes[0])
+        query: (editor) ->
+          editor.handler.classSelected('block-left')
       }
       block_center: {
         name: 'block_center',
@@ -149,6 +157,8 @@ window.SITEMPLATE.lib.wysihat =
         handler: (editor) ->
           classes = ['block-left', 'block-center', 'block-right']
           editor.handler.toggleClassOnSelection(classes, classes[1])
+        query: (editor) ->
+          editor.handler.classSelected('block-center')
       }
       block_right: {
         name: 'block_right',
@@ -162,6 +172,8 @@ window.SITEMPLATE.lib.wysihat =
         handler: (editor) ->
           classes = ['block-left', 'block-center', 'block-right']
           editor.handler.toggleClassOnSelection(classes, classes[2])
+        query: (editor) ->
+          editor.handler.classSelected('block-right')
       }
       inline_left: {
         name: 'inline_left',
@@ -174,6 +186,8 @@ window.SITEMPLATE.lib.wysihat =
         handler: (editor) ->
           classes = ['inline-left', 'inline-right']
           editor.handler.toggleClassOnSelection(classes, classes[0])
+        query: (editor) ->
+          editor.handler.classSelected('inline-left')
       }
       inline_right: {
         name: 'inline_right',
@@ -186,6 +200,8 @@ window.SITEMPLATE.lib.wysihat =
         handler: (editor) ->
           classes = ['inline-left', 'inline-right']
           editor.handler.toggleClassOnSelection(classes, classes[1])
+        query: (editor) ->
+          editor.handler.classSelected('inline-right')
       }
     }
     options:
@@ -246,11 +262,16 @@ window.SITEMPLATE.lib.wysihat =
 
       @editor.on 'click', '*', () ->
         self.editor.find('.selected').removeClass('selected')
-        $(@).addClass('selected') if $(@).hasClass('selectable')
+        if $(@).hasClass('selectable')
+          $(@).addClass('selected')
+          $(@).trigger("selection:change")
         false
 
       @editor[0].onkeyup = () ->
         self.editor.find('.selected').removeClass('selected')
+      @editor.click () ->
+        self.editor.find('.selected').removeClass('selected')
+        $(@).trigger("selection:change")
 
     scrollHandler: (event) ->
       if @needFixToolbar()
@@ -369,6 +390,33 @@ window.SITEMPLATE.lib.wysihat =
           $(wrapper).wrap("<div class='#{addClass}'/>")
         else
           $(wrapper).toggleClass(addClass)
+
+    classSelected: (class_name) ->
+      selected = @editor.find('.selected:first')
+      if selected.length > 0
+        return selected.hasClass class_name
+
+      sel = window.getSelection()
+      if (sel.rangeCount < 1)
+          return
+
+      range = sel.getRangeAt(0)
+
+      node = $(sel.focusNode)
+      return node.hasClass class_name
+
+    tagSelected: (tag_name) ->
+      sel = window.getSelection()
+      if (sel.rangeCount < 1)
+          return
+
+      range = sel.getRangeAt(0)
+
+      if sel.focusNode.nodeType == 3
+        node = $(sel.focusNode).parent()
+      else
+        node = $(sel.focusNode)
+      return node.prop('tagName') == tag_name
 
     content: () ->
       return @editor.html()
