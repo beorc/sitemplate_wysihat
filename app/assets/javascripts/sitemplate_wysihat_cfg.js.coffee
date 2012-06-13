@@ -4,6 +4,35 @@ window.SITEMPLATE.lib.wysihat = {} unless window.SITEMPLATE.lib.wysihat
 
 window.SITEMPLATE.lib.wysihat.cfg =
   buttons: {
+    undo: {
+      name: 'undo',
+      label: '<i class="undo icon-undo"/>',
+      init: (button) ->
+        locale = window.SITEMPLATE.lib.wysihat.local.getLocale()
+        button.
+          attr('rel', 'tooltip').
+          attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.undo).
+          tooltip().
+          addClass('btn btn-small disabled')
+        group = $('<div/>').addClass('btn-group').insertBefore(button)
+        button.appendTo group
+      handler: (editor) ->
+        editor.handler.rollback()
+    }
+    redo: {
+      name: 'redo',
+      label: '<i class="redo icon-redo"/>',
+      init: (button) ->
+        button.
+          attr('rel', 'tooltip').
+          attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.redo).
+          tooltip().
+          addClass('btn btn-small disabled')
+        group = button.prevAll('.btn-group:first')
+        button.appendTo group
+      handler: (editor) ->
+        editor.handler.redo()
+    }
     bold: {
       name: 'bold',
       label: '<i class="icon-bold"/>',
@@ -17,6 +46,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.boldSelection()
       query: (editor) ->
         editor.boldSelected()
@@ -33,6 +63,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.italicSelection()
       query: (editor) ->
         editor.italicSelected()
@@ -49,6 +80,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.underlineSelection()
       query: (editor) ->
         editor.underlineSelected()
@@ -65,6 +97,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.formatblockSelection('H1')
       query: (editor) ->
         editor.handler.tagSelected('H1')
@@ -81,6 +114,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.formatblockSelection('H2')
       query: (editor) ->
         editor.handler.tagSelected('H2')
@@ -97,6 +131,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.formatblockSelection('H3')
       query: (editor) ->
         editor.handler.tagSelected('H3')
@@ -113,6 +148,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.alignSelection 'left'
         editor.trigger("selection:change")
       query: (editor) ->
@@ -130,6 +166,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.alignSelection 'center'
         editor.trigger("selection:change")
       query: (editor) ->
@@ -147,6 +184,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.alignSelection 'right'
         editor.trigger("selection:change")
       query: (editor) ->
@@ -164,6 +202,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.alignSelection 'full'
       query: (editor) ->
         'justify' == editor.alignSelected()
@@ -180,6 +219,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.toggleUnorderedList()
       query: (editor) ->
         editor.orderedListSelected()
@@ -196,6 +236,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.toggleOrderedList()
       query: (editor) ->
         editor.unorderedListSelected()
@@ -212,6 +253,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.handler.cfg.options.insertImageHandler(editor)
     }
     inline_left: {
@@ -226,6 +268,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         classes = ['inline-left', 'inline-right']
         editor.handler.toggleClassOnSelection(classes, classes[0])
       query: (editor) ->
@@ -243,6 +286,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         classes = ['inline-left', 'inline-right']
         editor.handler.toggleClassOnSelection(classes, classes[1])
       query: (editor) ->
@@ -260,6 +304,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.handler.cfg.options.linkHandler(editor)
     }
     html: {
@@ -274,6 +319,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
+        editor.handler.saveState()
         editor.handler.cfg.options.insertHTMLHandler(editor)
     }
     save: {

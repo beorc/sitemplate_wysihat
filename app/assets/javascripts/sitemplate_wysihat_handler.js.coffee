@@ -37,6 +37,13 @@ window.SITEMPLATE.lib.wysihat.handler =
       @editor.before @toolbar_placeholder
       @toolbar.appendTo @toolbar_placeholder
 
+      @undo_button = @toolbar.find '.button.undo'
+      @redo_button = @toolbar.find '.button.redo'
+
+      if @undo_button && @redo_button
+        @undo = new window.SITEMPLATE.lib.wysihat.undo.Undo(@)
+        @saveState()
+
       @editor.parents('form:first').submit () =>
         @save()
 
@@ -52,7 +59,7 @@ window.SITEMPLATE.lib.wysihat.handler =
           $(@).trigger("selection:change")
         false
 
-      @editor[0].onkeyup = () ->
+      @editor.keyup () ->
         self.editor.find('.selected').removeClass('selected')
       @editor.click () ->
         self.editor.find('.selected').removeClass('selected')
@@ -72,14 +79,6 @@ window.SITEMPLATE.lib.wysihat.handler =
     insertImage: (url) ->
       @editor.insertImage(url)
       $('.editor img').addClass 'selectable'
-      #sel = window.getSelection()
-      #return if sel.rangeCount < 1
-      #range = sel.getRangeAt(0)
-      #startNode = range.startContainer
-      #if $(startNode).hasClass('editor')
-        #@editor.insertHTML("<div><img src=#{url}></div>")
-      #else
-        #@editor.insertImage(url)
       return false
 
     needFixToolbar: () ->
@@ -151,4 +150,33 @@ window.SITEMPLATE.lib.wysihat.handler =
 
     load: () ->
       @setContent(@textarea.value)
+
+    saveState: () ->
+      if @undo
+        @undo.push()
+        @updateButtons()
+
+    rollback: () ->
+      if @undo
+        @undo.undo()
+        @updateButtons()
+        editor.trigger("selection:change")
+
+    redo: () ->
+      if @undo
+        @undo.redo()
+        @updateButtons()
+        editor.trigger("selection:change")
+
+    updateButtons: () ->
+      if @undo
+        if @undo.hasUndo()
+          @undo_button.removeClass 'disabled'
+        else
+          @undo_button.addClass 'disabled'
+
+        if @undo.hasRedo()
+          @redo_button.removeClass 'disabled'
+        else
+          @redo_button.addClass 'disabled'
 
