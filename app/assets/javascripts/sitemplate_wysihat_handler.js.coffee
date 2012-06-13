@@ -10,8 +10,11 @@ window.SITEMPLATE.lib.wysihat =
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Bold')
-            button.tooltip()
+            attr('data-original-title', 'Bold').
+            tooltip().
+            addClass('btn btn-small')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
         handler: (editor) ->
           editor.boldSelection()
         query: (editor) ->
@@ -23,8 +26,11 @@ window.SITEMPLATE.lib.wysihat =
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Italic')
-            button.tooltip()
+            attr('data-original-title', 'Italic').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
         handler: (editor) ->
           editor.italicSelection()
         query: (editor) ->
@@ -32,74 +38,31 @@ window.SITEMPLATE.lib.wysihat =
       }
       underline: {
         name: 'underline',
-        label: '<i class="icon-pencil"/>',
+        label: '<i class="icon-underlined"/>',
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Underline')
-            button.tooltip()
+            attr('data-original-title', 'Underline').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
         handler: (editor) ->
           editor.underlineSelection()
         query: (editor) ->
           editor.underlineSelected()
       }
-      ol: {
-        name: 'ol',
-        label: '<i class="icon-th-list"/>',
-        init: (button) ->
-          button.
-            attr('rel', 'tooltip').
-            attr('data-original-title', 'Ordered list')
-            button.tooltip()
-        handler: (editor) ->
-          editor.toggleOrderedList()
-        query: (editor) ->
-          editor.unorderedListSelected()
-      }
-      ul: {
-        name: 'ul',
-        label: '<i class="icon-list"/>',
-        init: (button) ->
-          button.
-            attr('rel', 'tooltip').
-            attr('data-original-title', 'Unordered list')
-            button.tooltip()
-        handler: (editor) ->
-          editor.toggleUnorderedList()
-        query: (editor) ->
-          editor.orderedListSelected()
-      }
-      link: {
-        name: 'link',
-        label: '<i class="icon-globe"/>',
-        init: (button) ->
-          button.
-            attr('rel', 'tooltip').
-            attr('data-original-title', 'Link')
-            button.tooltip()
-        handler: (editor) ->
-          editor.handler.cfg.options.linkHandler(editor)
-      }
-      image: {
-        name: 'image',
-        label: '<i class="icon-picture"/>',
-        init: (button) ->
-          button.
-            attr('rel', 'tooltip').
-            attr('data-original-title', 'Image')
-            button.tooltip()
-            button.after('<span class="divider-vertical"/>')
-        handler: (editor) ->
-          editor.handler.cfg.options.insertImageHandler(editor)
-      }
       h1: {
         name: 'h1',
-        label: '<i class="icon-certificate"/>',
+        label: '<i class="icon-h1"/>',
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Header 1')
-            button.tooltip()
+            attr('data-original-title', 'Header 1').
+            tooltip().
+            addClass('btn btn-small')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
         handler: (editor) ->
           editor.formatblockSelection('H1')
         query: (editor) ->
@@ -107,12 +70,15 @@ window.SITEMPLATE.lib.wysihat =
       }
       h2: {
         name: 'h2',
-        label: '<i class="icon-certificate"/>',
+        label: '<i class="icon-h2"/>',
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Header 2')
-            button.tooltip()
+            attr('data-original-title', 'Header 2').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
         handler: (editor) ->
           editor.formatblockSelection('H2')
         query: (editor) ->
@@ -120,13 +86,15 @@ window.SITEMPLATE.lib.wysihat =
       }
       h3: {
         name: 'h3',
-        label: '<i class="icon-certificate"/>',
+        label: '<i class="icon-h3"/>',
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Header 3')
-            button.tooltip()
-            button.after('<span class="divider-vertical"/>')
+            attr('data-original-title', 'Header 3').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
         handler: (editor) ->
           editor.formatblockSelection('H3')
         query: (editor) ->
@@ -138,10 +106,13 @@ window.SITEMPLATE.lib.wysihat =
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Left block')
-            button.tooltip()
+            attr('data-original-title', 'Align left').
+            tooltip().
+            addClass('btn btn-small')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
         handler: (editor) ->
-          classes = ['block-left', 'block-center', 'block-right']
+          classes = ['block-left', 'block-center', 'block-right', 'block-justify']
           editor.handler.toggleClassOnSelection(classes, classes[0])
         query: (editor) ->
           editor.handler.classSelected('block-left')
@@ -152,10 +123,13 @@ window.SITEMPLATE.lib.wysihat =
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Center block')
-            button.tooltip()
+            attr('data-original-title', 'Align center').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
         handler: (editor) ->
-          classes = ['block-left', 'block-center', 'block-right']
+          classes = ['block-left', 'block-center', 'block-right', 'block-justify']
           editor.handler.toggleClassOnSelection(classes, classes[1])
         query: (editor) ->
           editor.handler.classSelected('block-center')
@@ -166,23 +140,91 @@ window.SITEMPLATE.lib.wysihat =
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Right block')
-            button.tooltip()
-            button.after('<span class="divider-vertical"/>')
+            attr('data-original-title', 'Align right').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
         handler: (editor) ->
-          classes = ['block-left', 'block-center', 'block-right']
+          classes = ['block-left', 'block-center', 'block-right', 'block-justify']
           editor.handler.toggleClassOnSelection(classes, classes[2])
         query: (editor) ->
           editor.handler.classSelected('block-right')
       }
-      inline_left: {
-        name: 'inline_left',
-        label: '<i class="icon-align-left"/>',
+      block_justify: {
+        name: 'block_justify',
+        label: '<i class="icon-align-justify"/>',
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Left inline')
-            button.tooltip()
+            attr('data-original-title', 'Align justify').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
+        handler: (editor) ->
+          classes = ['block-left', 'block-center', 'block-right', 'block-justify']
+          editor.handler.toggleClassOnSelection(classes, classes[3])
+        query: (editor) ->
+          editor.handler.classSelected('block-justify')
+      }
+      ul: {
+        name: 'ul',
+        label: '<i class="icon-list"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Unordered list').
+            tooltip().
+            addClass('btn btn-small')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
+        handler: (editor) ->
+          editor.toggleUnorderedList()
+        query: (editor) ->
+          editor.orderedListSelected()
+      }
+      ol: {
+        name: 'ol',
+        label: '<i class="icon-ol"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Ordered list').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
+        handler: (editor) ->
+          editor.toggleOrderedList()
+        query: (editor) ->
+          editor.unorderedListSelected()
+      }
+      image: {
+        name: 'image',
+        label: '<i class="icon-picture"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Image').
+            tooltip().
+            addClass('btn btn-small')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
+        handler: (editor) ->
+          editor.handler.cfg.options.insertImageHandler(editor)
+      }
+      inline_left: {
+        name: 'inline_left',
+        label: '<i class="icon-pull-left"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Left inline').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
         handler: (editor) ->
           classes = ['inline-left', 'inline-right']
           editor.handler.toggleClassOnSelection(classes, classes[0])
@@ -191,17 +233,61 @@ window.SITEMPLATE.lib.wysihat =
       }
       inline_right: {
         name: 'inline_right',
-        label: '<i class="icon-align-right"/>',
+        label: '<i class="icon-pull-right"/>',
         init: (button) ->
           button.
             attr('rel', 'tooltip').
-            attr('data-original-title', 'Right inline')
-            button.tooltip()
+            attr('data-original-title', 'Right inline').
+            tooltip().
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
         handler: (editor) ->
           classes = ['inline-left', 'inline-right']
           editor.handler.toggleClassOnSelection(classes, classes[1])
         query: (editor) ->
           editor.handler.classSelected('inline-right')
+      }
+      link: {
+        name: 'link',
+        label: '<i class="icon-link"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Link').
+            tooltip().
+            addClass('btn btn-small')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
+        handler: (editor) ->
+          editor.handler.cfg.options.linkHandler(editor)
+      }
+      html: {
+        name: 'html',
+        label: '<i class="icon-html"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'HTML').
+            tooltip().
+            addClass('btn btn-small')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
+        handler: (editor) ->
+          editor.insertHTML('')
+      }
+      save: {
+        name: 'save',
+        label: '<i class="icon-ok icon-white"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', 'Save').
+            tooltip().
+            addClass('btn btn-success')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
+        handler: (editor) ->
       }
     }
     options:
@@ -234,6 +320,7 @@ window.SITEMPLATE.lib.wysihat =
       toolbar.initialize(@editor)
 
       @toolbar = @editor.prevAll('.editor_toolbar:first')
+      @toolbar.addClass 'btn-toolbar'
 
       for name, button of cfg.buttons
         toolbar.addButton button if button

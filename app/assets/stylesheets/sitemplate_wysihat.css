@@ -31,6 +31,64 @@
   color: red;
 }
 
+.icon-h1 {
+    background-image: url("h1.png");
+}
+
+.icon-h2 {
+    background-image: url("h2.png");
+}
+
+.icon-h3 {
+    background-image: url("h3.png");
+}
+
+.icon-underlined {
+    background-image: url("underlined.png");
+}
+
+.icon-pull-right {
+    background-image: url("pull-right.png");
+}
+
+.icon-pull-left {
+    background-image: url("pull-left.png");
+}
+
+.icon-ol {
+    background-image: url("ol.png");
+}
+
+.icon-link {
+    background-image: url("link.png");
+}
+
+.icon-html {
+    background-image: url("html.png");
+}
+.icon-undo {
+    background-image: url("undo.png");
+}
+.icon-undo-unable {
+    background-image: url("undo-unable.png");
+}
+.icon-redo {
+    background-image: url("redo.png");
+}
+.icon-redo-unable {
+    background-image: url("redo-unable.png");
+}
+
+.icon-h1, .icon-h2, .icon-h3,
+.icon-underlined,
+.icon-pull-right, .icon-pull-left,
+.icon-ol,
+.icon-link,
+.icon-html,
+.icon-undo, .icon-undo-unable, .icon-redo, .icon-redo-unable {
+    background-position: 0;
+}
+
 .editor img.selected {
    padding:1px;
    border:1px solid #021a40;
@@ -53,3 +111,4 @@
 .editor .inline-right {
   float: right;
 }
+
