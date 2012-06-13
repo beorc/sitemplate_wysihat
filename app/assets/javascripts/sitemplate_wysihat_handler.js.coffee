@@ -313,16 +313,6 @@ window.SITEMPLATE.lib.wysihat =
       return toolbar_too_high
 
     toggleClassOnSelection: (removeClasses, addClass) ->
-      rangeIntersectsNode = (range, node) ->
-        nodeRange = node.ownerDocument.createRange()
-        try
-          nodeRange.selectNode(node)
-        catch e
-          nodeRange.selectNodeContents(node)
-
-        return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
-               range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
-
       selected = @editor.find('.selected:first')
       if selected.length > 0
         wrapper = selected
@@ -335,61 +325,8 @@ window.SITEMPLATE.lib.wysihat =
           selected.removeClass(name)
 
         selected.toggleClass(addClass)
+        @editor.trigger("selection:change")
         return
-
-      sel = window.getSelection()
-      if (sel.rangeCount < 1)
-          return
-      
-      range = sel.getRangeAt(0)
-
-      if (range.collapsed)
-        node = sel.focusNode
-        if !$(node).hasClass('editor')
-          $.each removeClasses, (i, name) ->
-            $(node).removeClass(name)
-
-          if (node.nodeType != 1)
-            $(node).wrap("<div class='#{addClass}'/>")
-          else
-            $(node).toggleClass(addClass)
-        return
-
-      startNode = range.startContainer
-      endNode = range.endContainer
-
-      #Create an array of all the text nodes in the selection
-      #using a TreeWalker
-      containerElement = range.commonAncestorContainer
-      if (containerElement.nodeType != 1)
-        containerElement = containerElement.parentNode
-
-      treeWalker = document.createTreeWalker containerElement,
-         NodeFilter.SHOW_ALL,
-         (node) ->
-           return if rangeIntersectsNode(range, node)
-                    NodeFilter.FILTER_ACCEPT
-                  else
-                    NodeFilter.FILTER_REJECT
-         ,
-         false
-
-      selectedNodes = []
-      while (treeWalker.nextNode())
-        selectedNodes.push(treeWalker.currentNode)
-
-      for node in selectedNodes
-        $.each removeClasses, (i, name) ->
-          $(node).removeClass(name)
-
-        wrapper = node
-        while (wrapper.parentNode && wrapper.parentNode != containerElement)
-          wrapper = wrapper.parentNode
-
-        if (wrapper.nodeType != 1)
-          $(wrapper).wrap("<div class='#{addClass}'/>")
-        else
-          $(wrapper).toggleClass(addClass)
 
     classSelected: (class_name) ->
       selected = @editor.find('.selected:first')
