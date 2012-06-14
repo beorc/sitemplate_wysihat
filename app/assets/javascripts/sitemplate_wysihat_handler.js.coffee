@@ -177,35 +177,36 @@ window.SITEMPLATE.lib.wysihat.handler =
       while (treeWalker.nextNode())
         selectedNodes.push(treeWalker.currentNode)
 
-      rng = document.createRange()
+      editing_class = '__stwh_editing__'
+      newRange = document.createRange()
+
+      handleElement = (element) ->
+        unless element.hasClass(editing_class)
+          element.addClass(editing_class)
+          element.toggleClass(addClass)
+
+          if newRange.collapsed
+            newRange.selectNode element[0]
+          else
+            newRange.setEndAfter element[0]
+
       for node in selectedNodes
         $.each removeClasses, (i, name) ->
           $(node).removeClass(name)
 
-        #wrapper = node
-        #while (wrapper.parentNode && wrapper.parentNode != containerElement)
-          #wrapper = wrapper.parentNode
-
-        #if (wrapper.nodeType != 1)
-          #$(wrapper).wrap("<div class='#{addClass}'/>")
-        #else
-          #$(wrapper).toggleClass(addClass)
-        if (node.nodeType == 3 && $(node).parent().hasClass('editor'))
-          target = $(node).wrap("<div class='#{addClass}'/>").parent()[0]
-          if rng.collapsed
-            rng.selectNode target
+        if (node.nodeType == 3)
+          if $(node).parent().hasClass('editor')
+            target = $(node).wrap("<div/>").parent()
+            handleElement(target)
           else
-            rng.setEndAfter node
-
-        if (node.nodeType != 3)
-          $(node).toggleClass(addClass)
-          if rng.collapsed
-            rng.selectNode node
-          else
-            rng.setEndAfter node
-
+            wrapper = $(node).parent()
+            handleElement(wrapper)
+        else
+          handleElement($(node))
+      
+      @editor.find('*').removeClass(editing_class)
       sel.removeAllRanges()
-      sel.addRange rng
+      sel.addRange newRange
 
     classSelected: (class_name) ->
       selected = @editor.find('.selected:first')
