@@ -96,7 +96,7 @@ window.SITEMPLATE.lib.wysihat.handler =
 
       return toolbar_too_high
 
-    toggleClassOnSelection: (removeClasses, addClass) ->
+    toggleClassOnSelectable: (removeClasses, addClass) ->
       selected = @editor.find('.selected:first')
       if selected.length > 0
         wrapper = selected
@@ -108,9 +108,104 @@ window.SITEMPLATE.lib.wysihat.handler =
         $.each removeClasses, (i, name) ->
           selected.removeClass(name)
 
-        selected.toggleClass(addClass)
+        if addClass
+          selected.toggleClass(addClass)
         @editor.trigger("selection:change")
+        true
+      false
+
+    toggleClassOnSelection: (removeClasses, addClass) ->
+      rangeIntersectsNode = (range, node) ->
+        nodeRange = node.ownerDocument.createRange()
+        try
+          nodeRange.selectNode(node)
+        catch e
+          nodeRange.selectNodeContents(node)
+
+        return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
+               range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
+
+      return if @toggleClassOnSelectable(removeClasses, addClass)
+
+      sel = window.getSelection()
+      if (sel.rangeCount < 1)
+          return
+      
+      range = sel.getRangeAt(0)
+
+      if (range.collapsed)
+        node = sel.focusNode
+        if !$(node).hasClass('editor')
+
+          if (node.nodeType == 3 && !$(node).parent().hasClass('editor'))
+            node = node.parentNode
+
+          $.each removeClasses, (i, name) ->
+            $(node).removeClass(name)
+
+          if (node.nodeType != 1)
+            target = $(node).wrap("<div class='#{addClass}'/>").parent()[0]
+            rng = document.createRange()
+            rng.selectNode target
+            sel.removeAllRanges()
+            sel.addRange rng
+            sel.collapse target
+          else
+            $(node).toggleClass(addClass)
         return
+
+      startNode = range.startContainer
+      endNode = range.endContainer
+
+      #Create an array of all the text nodes in the selection
+      #using a TreeWalker
+      containerElement = range.commonAncestorContainer
+      if (containerElement.nodeType != 1)
+        containerElement = containerElement.parentNode
+
+      treeWalker = document.createTreeWalker containerElement,
+         NodeFilter.SHOW_ALL,
+         (node) ->
+           return if rangeIntersectsNode(range, node)
+                    NodeFilter.FILTER_ACCEPT
+                  else
+                    NodeFilter.FILTER_REJECT
+         ,
+         false
+
+      selectedNodes = []
+      while (treeWalker.nextNode())
+        selectedNodes.push(treeWalker.currentNode)
+
+      rng = document.createRange()
+      for node in selectedNodes
+        $.each removeClasses, (i, name) ->
+          $(node).removeClass(name)
+
+        #wrapper = node
+        #while (wrapper.parentNode && wrapper.parentNode != containerElement)
+          #wrapper = wrapper.parentNode
+
+        #if (wrapper.nodeType != 1)
+          #$(wrapper).wrap("<div class='#{addClass}'/>")
+        #else
+          #$(wrapper).toggleClass(addClass)
+        if (node.nodeType == 3 && $(node).parent().hasClass('editor'))
+          target = $(node).wrap("<div class='#{addClass}'/>").parent()[0]
+          if rng.collapsed
+            rng.selectNode target
+          else
+            rng.setEndAfter node
+
+        if (node.nodeType != 3)
+          $(node).toggleClass(addClass)
+          if rng.collapsed
+            rng.selectNode node
+          else
+            rng.setEndAfter node
+
+      sel.removeAllRanges()
+      sel.addRange rng
 
     classSelected: (class_name) ->
       selected = @editor.find('.selected:first')
@@ -123,7 +218,10 @@ window.SITEMPLATE.lib.wysihat.handler =
 
       range = sel.getRangeAt(0)
 
-      node = $(sel.focusNode)
+      if (sel.focusNode.nodeType != 1)
+        node = $(sel.focusNode).parent()
+      else
+        node = $(sel.focusNode)
       return node.hasClass class_name
 
     tagSelected: (tag_name) ->
@@ -160,13 +258,13 @@ window.SITEMPLATE.lib.wysihat.handler =
       if @undo
         @undo.undo()
         @updateButtons()
-        editor.trigger("selection:change")
+        @editor.trigger("selection:change")
 
     redo: () ->
       if @undo
         @undo.redo()
         @updateButtons()
-        editor.trigger("selection:change")
+        @editor.trigger("selection:change")
 
     updateButtons: () ->
       if @undo

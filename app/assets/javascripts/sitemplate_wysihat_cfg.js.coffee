@@ -3,6 +3,21 @@ SITEMPLATE.lib = {} unless SITEMPLATE.lib
 window.SITEMPLATE.lib.wysihat = {} unless window.SITEMPLATE.lib.wysihat
 
 window.SITEMPLATE.lib.wysihat.cfg =
+
+  BLOCK_CLASSES: ['block-left', 'block-center', 'block-right', 'block-justify']
+  INLINE_CLASSES: ['inline-left', 'inline-right']
+
+  toggle_class_helper:
+    handler: (editor, classes, index) ->
+        editor.handler.saveState()
+        if editor.handler.classSelected(classes[index])
+          editor.handler.toggleClassOnSelection(classes)
+        else
+          editor.handler.toggleClassOnSelection(classes, classes[index])
+        editor.trigger("selection:change")
+    query: (editor, classes, index) ->
+      editor.handler.classSelected(classes[index])
+
   buttons: {
     undo: {
       name: 'undo',
@@ -148,11 +163,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        editor.alignSelection 'left'
-        editor.trigger("selection:change")
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 0)
       query: (editor) ->
-        'left' == editor.alignSelected()
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 0)
     }
     block_center: {
       name: 'block_center',
@@ -166,11 +179,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        editor.alignSelection 'center'
-        editor.trigger("selection:change")
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 1)
       query: (editor) ->
-        'center' == editor.alignSelected()
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 1)
     }
     block_right: {
       name: 'block_right',
@@ -184,11 +195,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        editor.alignSelection 'right'
-        editor.trigger("selection:change")
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 2)
       query: (editor) ->
-        'right' == editor.alignSelected()
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 2)
     }
     block_justify: {
       name: 'block_justify',
@@ -202,10 +211,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        editor.alignSelection 'full'
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 3)
       query: (editor) ->
-        'justify' == editor.alignSelected()
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 3)
     }
     ul: {
       name: 'ul',
@@ -268,11 +276,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        classes = ['inline-left', 'inline-right']
-        editor.handler.toggleClassOnSelection(classes, classes[0])
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
       query: (editor) ->
-        editor.handler.classSelected('inline-left')
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
     }
     inline_right: {
       name: 'inline_right',
@@ -286,11 +292,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        classes = ['inline-left', 'inline-right']
-        editor.handler.toggleClassOnSelection(classes, classes[1])
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
       query: (editor) ->
-        editor.handler.classSelected('inline-right')
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
     }
     link: {
       name: 'link',

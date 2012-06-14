@@ -26,11 +26,14 @@ window.SITEMPLATE.lib.wysihat.undo =
     isPresent: () ->
       @current_state == @states.length - 1
 
+    haveChanges: () ->
+      @handler.content() != @states[@states.length - 1]
+
     haveUnsaved: () ->
-      @isPresent() && @handler.content() != @states[@current_state]
+      @isPresent() && @haveChanges()
 
     push: () ->
-      return unless @haveUnsaved()
+      return unless @haveChanges()
 
       ++@current_state
 

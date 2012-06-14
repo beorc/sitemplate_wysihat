@@ -95,6 +95,20 @@
    background-color:#ff0;
 }
 
+.editor .block-left {
+  text-align: left;
+}
+.editor .block-center {
+  text-align: center;
+}
+.editor .block-right {
+  text-align: right;
+}
+
+.editor .block-justify {
+  text-align: justify;
+}
+
 .editor .inline-left {
   float: left;
 }
