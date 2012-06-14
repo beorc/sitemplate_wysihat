@@ -39,7 +39,8 @@ window.SITEMPLATE.lib.wysihat.undo =
 
       if (@current_state < @states.length - 1)
         @states.splice @current_state, @states.length - @current_state
-      if @current_state > @DEPTH
+      if @current_state > @DEPTH - 1
+        --@current_state
         @states.shift()
 
       @states.push @handler.content()
