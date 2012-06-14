@@ -11,6 +11,8 @@ window.SITEMPLATE.lib.wysihat.local =
 
   ru:
     toolbar:
+      undo: 'Отменить'
+      redo: 'Повторить'
       bold: 'Жирный'
       italic: 'Курсив'
       underline: 'Подчеркнутый'
@@ -34,6 +36,8 @@ window.SITEMPLATE.lib.wysihat.local =
 
   en:
     toolbar:
+      undo: 'Undo'
+      redo: 'Redo'
       bold: 'Bold'
       italic: 'Italic'
       underline: 'Underlined'
