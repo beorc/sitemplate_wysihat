@@ -338,6 +338,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
+        editor.handler.cfg.options.saveHandler(editor)
     }
   }
   options:
@@ -359,4 +360,8 @@ window.SITEMPLATE.lib.wysihat.cfg =
       value = prompt("Paste HTML", "")
       if value
         editor.insertHTML(value)
+
+    saveHandler: (editor) ->
+      form = editor.parents('form:first')
+      form.submit()
 
