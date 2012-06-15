@@ -115,16 +115,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       false
 
     toggleClassOnSelection: (removeClasses, addClass) ->
-      rangeIntersectsNode = (range, node) ->
-        nodeRange = node.ownerDocument.createRange()
-        try
-          nodeRange.selectNode(node)
-        catch e
-          nodeRange.selectNodeContents(node)
-
-        return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
-               range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
-
+      self = @
       return if @toggleClassOnSelectable(removeClasses, addClass)
 
       sel = window.getSelection()
@@ -136,46 +127,22 @@ window.SITEMPLATE.lib.wysihat.handler =
       if (range.collapsed)
         node = sel.focusNode
         if !$(node).hasClass('editor')
-
           if (node.nodeType == 3 && !$(node).parent().hasClass('editor'))
             node = node.parentNode
 
-          $.each removeClasses, (i, name) ->
-            $(node).removeClass(name)
-
           if (node.nodeType != 1)
             target = $(node).wrap("<div class='#{addClass}'/>").parent()[0]
-            rng = document.createRange()
-            rng.selectNode target
+            new_range = document.createRange()
+            new_range.selectNode target
             sel.removeAllRanges()
-            sel.addRange rng
+            sel.addRange new_range
             sel.collapse target
           else
+            $.each removeClasses, (i, name) ->
+              $(node).removeClass(name)
+
             $(node).toggleClass(addClass)
         return
-
-      startNode = range.startContainer
-      endNode = range.endContainer
-
-      #Create an array of all the text nodes in the selection
-      #using a TreeWalker
-      containerElement = range.commonAncestorContainer
-      if (containerElement.nodeType != 1)
-        containerElement = containerElement.parentNode
-
-      treeWalker = document.createTreeWalker containerElement,
-         NodeFilter.SHOW_ALL,
-         (node) ->
-           return if rangeIntersectsNode(range, node)
-                    NodeFilter.FILTER_ACCEPT
-                  else
-                    NodeFilter.FILTER_REJECT
-         ,
-         false
-
-      selectedNodes = []
-      while (treeWalker.nextNode())
-        selectedNodes.push(treeWalker.currentNode)
 
       editing_class = '__stwh_editing__'
       newRange = document.createRange()
@@ -190,19 +157,21 @@ window.SITEMPLATE.lib.wysihat.handler =
           else
             newRange.setEndAfter element[0]
 
-      for node in selectedNodes
-        $.each removeClasses, (i, name) ->
-          $(node).removeClass(name)
+      @editor.contents().each () ->
+        if self.rangeIntersectsNode(range, @)
+          node = @
+          $.each removeClasses, (i, name) ->
+            $(node).removeClass(name)
 
-        if (node.nodeType == 3)
-          if $(node).parent().hasClass('editor')
-            target = $(node).wrap("<div/>").parent()
-            handleElement(target)
+          if (node.nodeType == 3)
+            if $(node).parent().hasClass('editor')
+              target = $(node).wrap("<div/>").parent()
+              handleElement(target)
+            else
+              wrapper = $(node).parent()
+              handleElement(wrapper)
           else
-            wrapper = $(node).parent()
-            handleElement(wrapper)
-        else
-          handleElement($(node))
+            handleElement($(node))
       
       @editor.find('*').removeClass(editing_class)
       sel.removeAllRanges()
@@ -225,18 +194,97 @@ window.SITEMPLATE.lib.wysihat.handler =
         node = $(sel.focusNode)
       return node.hasClass class_name
 
-    tagSelected: (tag_name) ->
+    tagSelected: (tag) ->
+      self = this
+      result = false
+
       sel = window.getSelection()
       if (sel.rangeCount < 1)
           return
 
       range = sel.getRangeAt(0)
 
-      if sel.focusNode.nodeType == 3
-        node = $(sel.focusNode).parent()
-      else
-        node = $(sel.focusNode)
-      return node.prop('tagName') == tag_name
+      if (range.collapsed)
+        node = sel.focusNode
+        return false if $(node).hasClass('editor') 
+        while (node.tagName != tag && !$(node).parent().hasClass('editor'))
+          node = node.parentNode
+        return node.tagName == tag
+
+      @editor.find('*').each () ->
+        if self.rangeIntersectsNode(range, @)
+          node = @
+          while (node.tagName != tag && !$(node).parent().hasClass('editor'))
+            node = node.parentNode
+
+          if node.tagName == tag
+            result = true
+          else
+            result = $(node).find(tag).length > 0
+
+      result
+
+    removeTagFromSelection: (tag) ->
+
+      sel = window.getSelection()
+      if (sel.rangeCount < 1)
+          return true
+      
+      self = @
+      new_range = document.createRange()
+      range = sel.getRangeAt(0)
+
+      handleNode = (node) ->
+        extract = (node) ->
+          if node.tagName == tag
+            contents = $(node).contents()
+            $(node).after contents
+            $(node).remove()
+            contents.each () ->
+              if new_range.collapsed
+                new_range.selectNode @
+              else
+                new_range.setEndAfter @
+
+        source_node = node
+
+        while (node.tagName != tag && !$(node).parent().hasClass('editor'))
+          node = node.parentNode
+        extract node
+
+        unless range.collapsed
+          node = source_node
+          $(node).find(tag).each () ->
+            extract @
+        true
+
+      if (range.collapsed)
+        node = sel.focusNode
+        handleNode node
+        sel.removeAllRanges()
+        sel.addRange new_range
+        sel.collapse new_range.startContainer
+
+        return
+
+      @editor.contents().each () ->
+        if self.rangeIntersectsNode(range, @)
+          handleNode @
+
+      sel.removeAllRanges()
+      sel.addRange new_range
+      true
+
+    rangeIntersectsNode: (range, node) ->
+      nodeRange = node.ownerDocument.createRange()
+      try
+        nodeRange.selectNode(node)
+      catch e
+        nodeRange.selectNodeContents(node)
+
+      return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
+             range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
+
 
     content: () ->
       return @editor.html()

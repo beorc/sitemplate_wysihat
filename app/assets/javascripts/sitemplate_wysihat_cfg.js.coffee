@@ -19,6 +19,18 @@ window.SITEMPLATE.lib.wysihat.cfg =
     query: (editor, classes, index) ->
       editor.handler.classSelected(classes[index])
 
+
+  toggle_tag_helper:
+    handler: (editor, tag) ->
+      editor.handler.saveState()
+
+      if editor.handler.tagSelected(tag)
+        editor.handler.removeTagFromSelection(tag)
+      else
+        editor.formatblockSelection(tag)
+    query: (editor, tag) ->
+      editor.handler.tagSelected(tag)
+
   buttons: {
     undo: {
       name: 'undo',
@@ -113,10 +125,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        editor.formatblockSelection('H1')
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.handler(editor, 'H1')
       query: (editor) ->
-        editor.handler.tagSelected('H1')
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.query(editor, 'H1')
     }
     h2: {
       name: 'h2',
@@ -130,10 +141,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        editor.formatblockSelection('H2')
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.handler(editor, 'H2')
       query: (editor) ->
-        editor.handler.tagSelected('H2')
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.query(editor, 'H2')
     }
     h3: {
       name: 'h3',
@@ -147,10 +157,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        editor.handler.saveState()
-        editor.formatblockSelection('H3')
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.handler(editor, 'H3')
       query: (editor) ->
-        editor.handler.tagSelected('H3')
+        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.query(editor, 'H3')
     }
     block_left: {
       name: 'block_left',
