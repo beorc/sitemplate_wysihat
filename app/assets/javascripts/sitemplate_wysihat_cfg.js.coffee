@@ -360,9 +360,23 @@ window.SITEMPLATE.lib.wysihat.cfg =
     insertHTMLHandler: (editor) ->
       value = prompt("Paste HTML", "")
       if value
-        editor.insertHTML(value)
+        editor.insertHTML(editor.handler.cfg.options.beforePaste(value))
 
     saveHandler: (editor) ->
       form = editor.parents('form:first')
       form.submit()
+
+    beforePaste: (text) ->
+      div = $('<div></div>').
+        addClass('hidden wym_paste_container').
+        html(text).
+        appendTo($('body'))
+      $('.wym_paste_container').find('*').each () ->
+            $(@).removeAttr('class')
+            $(@).removeAttr('style')
+
+      html = $('.wym_paste_container').html()
+      $('.wym_paste_container').remove()
+      html
+
 
