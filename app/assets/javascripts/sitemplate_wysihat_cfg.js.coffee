@@ -6,6 +6,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
 
   BLOCK_CLASSES: ['block-left', 'block-center', 'block-right', 'block-justify']
   INLINE_CLASSES: ['inline-left', 'inline-right']
+  TOOLTIP_OPTIONS: placement: 'bottom'
 
   toggle_class_helper:
     handler: (editor, classes, index) ->
@@ -27,7 +28,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.undo).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small disabled')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
@@ -41,7 +42,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.redo).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small disabled')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -56,7 +57,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.bold).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
@@ -73,7 +74,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.italic).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -90,7 +91,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.underline).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -107,7 +108,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.h1).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
@@ -124,7 +125,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.h2).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -141,7 +142,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.h3).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -158,7 +159,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.align.left).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
@@ -174,7 +175,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.align.center).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -190,7 +191,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.align.right).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -206,7 +207,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.align.justify).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -222,7 +223,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.ul).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
@@ -239,7 +240,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.ol).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -256,7 +257,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.image).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
@@ -271,7 +272,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.inline.left).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -287,7 +288,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.inline.right).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = button.prevAll('.btn-group:first')
         button.appendTo group
@@ -303,7 +304,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.link).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
@@ -318,7 +319,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.html).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-small')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
@@ -333,7 +334,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         button.
           attr('rel', 'tooltip').
           attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.save).
-          tooltip().
+          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
           addClass('btn btn-success')
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
