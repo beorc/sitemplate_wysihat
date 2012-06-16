@@ -12,14 +12,14 @@ code
 p = User.first.biography
 = simple_form_for User.first do |f|
   fieldset
-    = f.input :biography, as: :sitemplate_rich_editor
+    = f.sitemplate_wysihat :biography
   .form-actions
     = f.button :submit, :class => 'btn-primary'
 
 p = User.last.biography
 = simple_form_for User.last do |f|
   fieldset
-    = f.input :biography, as: :sitemplate_rich_editor
+    = f.sitemplate_wysihat :biography
   .form-actions
     = f.button :submit, :class => 'btn-primary'
 

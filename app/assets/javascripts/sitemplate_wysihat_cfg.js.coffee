@@ -7,6 +7,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
   BLOCK_CLASSES: ['block-left', 'block-center', 'block-right', 'block-justify']
   INLINE_CLASSES: ['inline-left', 'inline-right']
   TOOLTIP_OPTIONS: placement: 'bottom'
+  HEADER_SELECTOR: 'header'
 
   toggle_class_helper:
     handler: (editor, classes, index) ->

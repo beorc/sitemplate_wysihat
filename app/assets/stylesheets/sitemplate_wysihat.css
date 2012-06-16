@@ -1,12 +1,7 @@
 .editor {
   clear: both;
   min-height: 100px;
-  margin: 5px 0;
-  padding: 5px;
-  border: 1px solid #acacac;
   outline: none;
-  font-family: 'Lucida Grande', verdana, arial, sans-serif;
-  font-size: 12px;
 }
 
 .editor p {

@@ -29,8 +29,10 @@ window.SITEMPLATE.lib.wysihat.handler =
         toolbar.addDropdown dropdown if dropdown
 
       @toolbar_placeholder = $('<div/>').
-        addClass('placeholder').
-        css {
+        addClass('placeholder')
+
+      if @toolbar.height() > 0
+        @toolbar_placeholder.css {
           height: @toolbar.height()
         }
 
@@ -69,7 +71,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       if @needFixToolbar()
         @toolbar.css {
           position: 'fixed',
-          top: $('header').height()
+          top: $(@cfg.HEADER_SELECTOR).height()
         }
       else
         @toolbar.css {
@@ -82,7 +84,11 @@ window.SITEMPLATE.lib.wysihat.handler =
       return false
 
     needFixToolbar: () ->
-      static_offset = $('header').height()
+      if @cfg.HEADER_SELECTOR
+        static_offset = $(@cfg.HEADER_SELECTOR).height()
+      else
+        static_offset = 7
+
       elem = @editor
       docViewTop = static_offset + $(window).scrollTop()
       docViewBottom = static_offset + docViewTop + $(window).height()
@@ -294,6 +300,7 @@ window.SITEMPLATE.lib.wysihat.handler =
 
     save: () ->
       @textarea.value = @content()
+      $('.editor_toolbar .button').tooltip('hide')
 
     load: () ->
       @setContent(@textarea.value)
