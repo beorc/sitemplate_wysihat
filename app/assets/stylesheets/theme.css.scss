@@ -4,6 +4,17 @@
   outline: none;
 }
 
+.wysihat-framed {
+  margin: 5px 0;
+  padding: 5px;
+  border: 1px solid #acacac;
+}
+
+.wysihat-scrollable {
+  max-height: 200px;
+  overflow: auto;
+}
+
 .editor p {
   margin: 0;
 }
