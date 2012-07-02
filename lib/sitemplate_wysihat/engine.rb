@@ -9,8 +9,5 @@ module SitemplateWysihat
   end
 
   class Engine < ::Rails::Engine
-    #config.to_prepare do
-      #::SimpleForm::FormBuilder.alias_method_chain :input, :rich_editor
-    #end
   end
 end

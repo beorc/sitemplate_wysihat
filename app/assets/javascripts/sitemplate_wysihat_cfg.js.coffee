@@ -8,6 +8,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
   INLINE_CLASSES: ['inline-left', 'inline-right']
   TOOLTIP_OPTIONS: placement: 'bottom'
   HEADER_SELECTOR: 'header'
+  styles: ['wysihat-framed', 'wysihat-scrollable']
 
   toggle_class_helper:
     handler: (editor, classes, index) ->

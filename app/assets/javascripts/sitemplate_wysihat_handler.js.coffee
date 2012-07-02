@@ -14,6 +14,9 @@ window.SITEMPLATE.lib.wysihat.handler =
 
       @editor.addClass 'clearfix'
 
+      for style in cfg.styles
+        @editor.addClass style
+
       toolbar = new WysiHat.Toolbar()
       toolbar.initialize(@editor)
 
