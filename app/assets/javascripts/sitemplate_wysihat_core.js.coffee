@@ -4,7 +4,7 @@ window.SITEMPLATE.lib.wysihat = {} unless window.SITEMPLATE.lib.wysihat
 
 window.SITEMPLATE.lib.wysihat.init = (editors, cfg) ->
   if (editors.length > 0)
-    $.getScript '/assets/jq-wysihat.js', () ->
+    $.getScript '/jq-wysihat.js', () ->
       cfg = SITEMPLATE.lib.wysihat.cfg unless cfg
       SITEMPLATE.lib.wysihat.attach(editors, cfg)
 
@@ -22,7 +22,7 @@ window.SITEMPLATE.lib.wysihat.attachAll = (cfg) ->
 
 window.SITEMPLATE.lib.wysihat.initAll = (cfg) ->
   if ($(SITEMPLATE.lib.wysihat.EDITOR_SELECTOR).length > 0)
-    $.getScript '/assets/jq-wysihat.js', () ->
+    $.getScript '/jq-wysihat.js', () ->
       cfg = SITEMPLATE.lib.wysihat.cfg unless cfg
       SITEMPLATE.lib.wysihat.attachAll(cfg)
 
