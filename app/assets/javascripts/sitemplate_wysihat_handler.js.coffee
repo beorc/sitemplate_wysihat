@@ -70,14 +70,15 @@ window.SITEMPLATE.lib.wysihat.handler =
         self.editor.find('.selected').removeClass('selected')
 
       @editor.click () ->
-        if self.framed()
-          self.editor.addClass 'wysihat-selected'
-
         self.editor.find('.selected').removeClass('selected')
         $(@).trigger("selection:change")
 
-      @editor.blur () ->
-        if self.framed()
+      if self.framed()
+        @editor.focus () ->
+          self.editor.addClass 'wysihat-selected'
+
+      if self.framed()
+        @editor.blur () ->
           self.editor.removeClass 'wysihat-selected'
 
     scrollHandler: (event) ->
