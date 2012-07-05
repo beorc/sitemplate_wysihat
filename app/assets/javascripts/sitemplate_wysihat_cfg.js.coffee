@@ -276,6 +276,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.handler.saveState()
         editor.handler.cfg.options.insertImageHandler(editor)
     }
+    ###
     inline_left: {
       name: 'inline_left',
       label: '<i class="icon-pull-left"/>',
@@ -308,6 +309,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
       query: (editor) ->
         window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
     }
+    ###
     link: {
       name: 'link',
       label: '<i class="icon-link"/>',
