@@ -242,7 +242,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.handler.saveState()
         editor.toggleUnorderedList()
       query: (editor) ->
-        editor.orderedListSelected()
+        editor.unorderedListSelected()
     }
     ol: {
       name: 'ol',
@@ -259,7 +259,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.handler.saveState()
         editor.toggleOrderedList()
       query: (editor) ->
-        editor.unorderedListSelected()
+        editor.orderedListSelected()
     }
     image: {
       name: 'image',
