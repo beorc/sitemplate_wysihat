@@ -11,6 +11,8 @@ window.SITEMPLATE.lib.wysihat.handler =
       @editor.handler = self
       self.cfg = cfg
       @load()
+      if @editor.html().length == 0
+        self.setContent('<br>')
 
       @editor.addClass 'clearfix'
 
@@ -66,9 +68,17 @@ window.SITEMPLATE.lib.wysihat.handler =
 
       @editor.keyup () ->
         self.editor.find('.selected').removeClass('selected')
+
       @editor.click () ->
+        if self.framed()
+          self.editor.addClass 'wysihat-selected'
+
         self.editor.find('.selected').removeClass('selected')
         $(@).trigger("selection:change")
+
+      @editor.blur () ->
+        if self.framed()
+          self.editor.removeClass 'wysihat-selected'
 
     scrollHandler: (event) ->
       if @needFixToolbar()
@@ -215,7 +225,7 @@ window.SITEMPLATE.lib.wysihat.handler =
 
       if (range.collapsed)
         node = sel.focusNode
-        return false if $(node).hasClass('editor') 
+        return false if $(node).hasClass('editor')
         while (node.tagName != tag && !$(node).parent().hasClass('editor'))
           node = node.parentNode
         return node.tagName == tag
@@ -294,6 +304,8 @@ window.SITEMPLATE.lib.wysihat.handler =
       return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
              range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
 
+    framed: () ->
+      return 'wysihat-framed' in @cfg.styles
 
     content: () ->
       return @editor.html()
