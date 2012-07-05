@@ -51,13 +51,17 @@ window.SITEMPLATE.lib.wysihat.handler =
         @undo = new window.SITEMPLATE.lib.wysihat.undo.Undo(@)
         @saveState()
 
-      @editor.parents('form:first').submit () =>
+      form = @editor.parents('form:first')
+      form.submit () =>
         @save()
+
+      form.bind "show", () ->
+        self.scrollHandler()
 
       # Handlers
 
       $(window).bind "scroll", (event) =>
-        @scrollHandler(event)
+        @scrollHandler()
 
       @editor.on 'click', '*', () ->
         self.editor.find('.selected').removeClass('selected')
@@ -81,7 +85,7 @@ window.SITEMPLATE.lib.wysihat.handler =
         @editor.blur () ->
           self.editor.removeClass 'wysihat-selected'
 
-    scrollHandler: (event) ->
+    scrollHandler: () ->
       if @needFixToolbar()
         @toolbar.css {
           position: 'fixed',
