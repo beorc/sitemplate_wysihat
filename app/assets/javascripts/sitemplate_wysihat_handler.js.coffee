@@ -19,6 +19,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       for style in cfg.styles
         @editor.addClass style
 
+      # set up toolbar
       toolbar = new WysiHat.Toolbar()
       toolbar.initialize(@editor)
 
@@ -37,9 +38,13 @@ window.SITEMPLATE.lib.wysihat.handler =
         addClass('placeholder')
 
       if @toolbar.height() > 0
-        @toolbar_placeholder.css {
-          height: @toolbar.height()
-        }
+        height = @toolbar.height()
+      else
+        height = cfg.HEADER_HEIGHT
+
+      @toolbar_placeholder.css {
+        height: height
+      }
 
       @editor.before @toolbar_placeholder
       @toolbar.appendTo @toolbar_placeholder
@@ -56,6 +61,7 @@ window.SITEMPLATE.lib.wysihat.handler =
         @save()
 
       form.bind "show", () ->
+        self.load()
         self.scrollHandler()
 
       # Handlers
@@ -76,6 +82,12 @@ window.SITEMPLATE.lib.wysihat.handler =
       @editor.click () ->
         self.editor.find('.selected').removeClass('selected')
         $(@).trigger("selection:change")
+
+      @editor.bind 'paste', (e) ->
+        self.editor.find('*').each () ->
+          $(@).addClass('__before_paste__')
+        callback = () -> self.afterPaste(self.editor)
+        self.pastetimer = window.setTimeout( callback, 10);
 
       if self.framed()
         @editor.focus () ->
@@ -98,7 +110,7 @@ window.SITEMPLATE.lib.wysihat.handler =
 
     insertImage: (url) ->
       @editor.insertImage(url)
-      $('.editor img').addClass 'selectable'
+      @adaptContent()
       return false
 
     needFixToolbar: () ->
@@ -353,4 +365,17 @@ window.SITEMPLATE.lib.wysihat.handler =
           @redo_button.removeClass 'disabled'
         else
           @redo_button.addClass 'disabled'
+
+    adaptContent: () ->
+      $('.editor img').addClass 'selectable'
+
+    afterPaste: (editor) ->
+      editor.find('*').each () ->
+        if $(@).hasClass '__before_paste__'
+          $(@).removeClass '__before_paste__'
+        else
+          $(@).removeAttr('class')
+          $(@).removeAttr('style')
+
+      editor.handler.adaptContent()
 

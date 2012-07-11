@@ -8,6 +8,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
   INLINE_CLASSES: ['inline-left', 'inline-right']
   TOOLTIP_OPTIONS: placement: 'bottom'
   HEADER_SELECTOR: 'header'
+  HEADER_HEIGHT: 33
   styles: ['wysihat-framed', 'wysihat-scrollable']
 
   toggle_class_helper:
@@ -374,6 +375,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
       value = prompt("Paste HTML", "")
       if value
         editor.insertHTML(editor.handler.cfg.options.beforePaste(value))
+        editor.handler.adaptContent()
 
     saveHandler: (editor) ->
       form = editor.parents('form:first')
@@ -385,8 +387,8 @@ window.SITEMPLATE.lib.wysihat.cfg =
         html(text).
         appendTo($('body'))
       $('.wym_paste_container').find('*').each () ->
-            $(@).removeAttr('class')
-            $(@).removeAttr('style')
+        $(@).removeAttr('class')
+        $(@).removeAttr('style')
 
       html = $('.wym_paste_container').html()
       $('.wym_paste_container').remove()

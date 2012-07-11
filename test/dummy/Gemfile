@@ -20,8 +20,8 @@ gem "rolify", ">= 3.1.0"
 gem "bootstrap-sass", ">= 2.0.3"
 
 gem "slim"
-gem 'compass', "0.12.rc.1"
-gem 'compass_twitter_bootstrap'
+gem 'compass-rails'
+gem 'compass_twitter_bootstrap', '2.0.1.2'
 gem 'simple_form', git: "https://github.com/plataformatec/simple_form.git"
 gem 'sitemplate_wysihat', path: '../..'
 gem "i18n"
