@@ -37,8 +37,8 @@ window.SITEMPLATE.lib.wysihat.handler =
       @toolbar_placeholder = $('<div/>').
         addClass('placeholder')
 
-      if @toolbar.height() > 0
-        height = @toolbar.height()
+      if @toolbar.outerHeight() > 0
+        height = @toolbar.outerHeight()
       else
         height = cfg.HEADER_HEIGHT
 
