@@ -109,6 +109,7 @@ window.SITEMPLATE.lib.wysihat.handler =
         }
 
     insertImage: (url) ->
+      @editor.focus()
       @editor.insertImage(url)
       @adaptContent()
       return false
