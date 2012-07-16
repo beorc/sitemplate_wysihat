@@ -2,18 +2,11 @@ window.SITEMPLATE = {} unless window.SITEMPLATE
 SITEMPLATE.lib = {} unless SITEMPLATE.lib
 window.SITEMPLATE.lib.wysihat = {} unless window.SITEMPLATE.lib.wysihat
 
-window.SITEMPLATE.lib.wysihat.cfg =
-
-  BLOCK_CLASSES: ['block-left', 'block-center', 'block-right', 'block-justify']
-  INLINE_CLASSES: ['inline-left', 'inline-right']
-  TOOLTIP_OPTIONS: placement: 'bottom'
-  HEADER_SELECTOR: 'header'
-  HEADER_HEIGHT: 33
-  styles: ['wysihat-framed', 'wysihat-scrollable']
-
-  toggle_class_helper:
+window.SITEMPLATE.lib.wysihat.helpers =
+  toggle_class:
     handler: (editor, classes, index) ->
         editor.handler.saveState()
+
         if editor.handler.classSelected(classes[index])
           editor.handler.toggleClassOnSelection(classes)
         else
@@ -22,8 +15,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
     query: (editor, classes, index) ->
       editor.handler.classSelected(classes[index])
 
-
-  toggle_tag_helper:
+  toggle_tag:
     handler: (editor, tag) ->
       editor.handler.saveState()
 
@@ -33,6 +25,17 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.formatblockSelection(tag)
     query: (editor, tag) ->
       editor.handler.tagSelected(tag)
+
+window.SITEMPLATE.lib.wysihat.cfg =
+
+  BLOCK_ALIGN_CLASSES: ['block-left', 'block-center', 'block-right', 'block-justify']
+  IMAGE_ALIGN_CLASSES: ['image-left', 'image-center', 'image-right']
+  INLINE_CLASSES: ['inline-left', 'inline-right']
+  TOOLTIP_OPTIONS: placement: 'bottom'
+  HEADER_SELECTOR: 'header'
+  HEADER_HEIGHT: 33
+  TOP_OFFSET: 7
+  styles: ['wysihat-framed', 'wysihat-scrollable']
 
   buttons: {
     undo: {
@@ -128,9 +131,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.handler(editor, 'H1')
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_tag.handler(editor, 'H1')
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.query(editor, 'H1')
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_tag.query(editor, 'H1')
     }
     h2: {
       name: 'h2',
@@ -144,9 +147,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.handler(editor, 'H2')
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_tag.handler(editor, 'H2')
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.query(editor, 'H2')
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_tag.query(editor, 'H2')
     }
     h3: {
       name: 'h3',
@@ -160,9 +163,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.handler(editor, 'H3')
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_tag.handler(editor, 'H3')
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_tag_helper.query(editor, 'H3')
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_tag.query(editor, 'H3')
     }
     block_left: {
       name: 'block_left',
@@ -176,9 +179,17 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = $('<div/>').addClass('btn-group').insertBefore(button)
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 0)
+        selected = editor.find('.selected:first')
+        if selected.length > 0
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.IMAGE_ALIGN_CLASSES, 0)
+        else
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_ALIGN_CLASSES, 0)
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 0)
+        selected = editor.find('.selected:first')
+        if selected.length > 0
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.IMAGE_ALIGN_CLASSES, 0)
+        else
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_ALIGN_CLASSES, 0)
     }
     block_center: {
       name: 'block_center',
@@ -192,9 +203,17 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 1)
+        selected = editor.find('.selected:first')
+        if selected.length > 0
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.IMAGE_ALIGN_CLASSES, 1)
+        else
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_ALIGN_CLASSES, 1)
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 1)
+        selected = editor.find('.selected:first')
+        if selected.length > 0
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.IMAGE_ALIGN_CLASSES, 1)
+        else
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_ALIGN_CLASSES, 1)
     }
     block_right: {
       name: 'block_right',
@@ -208,9 +227,17 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 2)
+        selected = editor.find('.selected:first')
+        if selected.length > 0
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.IMAGE_ALIGN_CLASSES, 2)
+        else
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_ALIGN_CLASSES, 2)
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 2)
+        selected = editor.find('.selected:first')
+        if selected.length > 0
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.IMAGE_ALIGN_CLASSES, 2)
+        else
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_ALIGN_CLASSES, 2)
     }
     block_justify: {
       name: 'block_justify',
@@ -224,9 +251,13 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 3)
+        selected = editor.find('.selected:first')
+        if selected.length == 0
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_ALIGN_CLASSES, 3)
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_CLASSES, 3)
+        selected = editor.find('.selected:first')
+        if selected.length == 0
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.BLOCK_ALIGN_CLASSES, 3)
     }
     ul: {
       name: 'ul',
@@ -290,9 +321,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
     }
     inline_right: {
       name: 'inline_right',
@@ -306,9 +337,9 @@ window.SITEMPLATE.lib.wysihat.cfg =
         group = button.prevAll('.btn-group:first')
         button.appendTo group
       handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
       query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.cfg.toggle_class_helper.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
+        window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
     }
     ###
     link: {

@@ -118,7 +118,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       if @cfg.HEADER_SELECTOR
         static_offset = $(@cfg.HEADER_SELECTOR).height()
       else
-        static_offset = 7
+        static_offset = @cfg.TOP_OFFSET
 
       elem = @editor
       docViewTop = static_offset + $(window).scrollTop()
@@ -133,21 +133,24 @@ window.SITEMPLATE.lib.wysihat.handler =
 
       return toolbar_too_high
 
+    toggleClass: (selected, removeClasses, addClass) ->
+      wrapper = selected
+      while (wrapper.parent() && !wrapper.parent().hasClass('editor'))
+        wrapper = wrapper.parent()
+
+      wrapper.after selected if wrapper!=selected
+
+      $.each removeClasses, (i, name) ->
+        selected.removeClass(name)
+
+      if addClass
+        selected.toggleClass(addClass)
+      @editor.trigger("selection:change")
+
     toggleClassOnSelectable: (removeClasses, addClass) ->
       selected = @editor.find('.selected:first')
       if selected.length > 0
-        wrapper = selected
-        while (wrapper.parent() && !wrapper.parent().hasClass('editor'))
-          wrapper = wrapper.parent()
-
-        wrapper.after selected if wrapper!=selected
-
-        $.each removeClasses, (i, name) ->
-          selected.removeClass(name)
-
-        if addClass
-          selected.toggleClass(addClass)
-        @editor.trigger("selection:change")
+        @toggleClass selected, removeClasses, addClass
         true
       false
 

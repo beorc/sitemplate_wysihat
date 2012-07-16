@@ -112,27 +112,42 @@
    padding: 1px;
    border:1px solid #021a40;
    background-color: blue;
-   margin: -2px;
 }
 
-.editor .block-left {
+.block-left {
   text-align: left;
 }
-.editor .block-center {
+
+.block-center {
   text-align: center;
 }
-.editor .block-right {
+
+.block-right {
   text-align: right;
 }
 
-.editor .block-justify {
+.block-justify {
   text-align: justify;
 }
 
-.editor .inline-left {
+.inline-left {
   float: left;
 }
-.editor .inline-right {
+
+.inline-right {
   float: right;
 }
 
+.image-left {
+  float: left;
+}
+
+.image-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto
+}
+
+.image-right {
+  float: right;
+}
