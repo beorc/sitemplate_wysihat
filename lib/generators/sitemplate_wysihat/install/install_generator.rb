@@ -7,15 +7,19 @@ class SitemplateWysihat::InstallGenerator < Rails::Generators::Base
 
   def add_assets
     filename = 'app/assets/javascripts/application.js'
-    File.open(filename) do |io|
-      str = '//= require sitemplate_wysihat'
-      append_file(filename, str) if io.grep(str).blank?
+    if File.exist? filename
+      File.open(filename) do |io|
+        str = '//= require sitemplate_wysihat'
+        append_file(filename, str) if io.grep(str).blank?
+      end
     end
 
     filename = 'app/assets/stylesheets/application.css'
-    File.open(filename) do |io|
-      str = " *= require sitemplate_wysihat\n"
-      inject_into_file(filename, str, before: '*/') if io.grep(str).blank?
+    if File.exist? filename
+      File.open(filename) do |io|
+        str = " *= require sitemplate_wysihat\n"
+        inject_into_file(filename, str, before: '*/') if io.grep(str).blank?
+      end
     end
   end
 end

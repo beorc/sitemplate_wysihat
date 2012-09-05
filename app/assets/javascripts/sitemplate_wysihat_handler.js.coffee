@@ -3,7 +3,7 @@ SITEMPLATE.lib = {} unless SITEMPLATE.lib
 window.SITEMPLATE.lib.wysihat = {} unless window.SITEMPLATE.lib.wysihat
 
 window.SITEMPLATE.lib.wysihat.handler =
-  EditorHandler: class 
+  EditorHandler: class
     constructor: (editor, cfg) ->
       self = @
       @textarea = editor
@@ -128,7 +128,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       elemBottom = elemTop + elem.height()
 
       toolbar_too_high = (elemTop < docViewTop) && (elemBottom > docViewTop)
-        
+
       #console.log elemTop+'<'+docViewTop+' and '+elemBottom+'>'+docViewTop
 
       return toolbar_too_high
@@ -161,7 +161,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       sel = window.getSelection()
       if (sel.rangeCount < 1)
           return
-      
+
       range = sel.getRangeAt(0)
 
       if (range.collapsed)
@@ -212,7 +212,7 @@ window.SITEMPLATE.lib.wysihat.handler =
               handleElement(wrapper)
           else
             handleElement($(node))
-      
+
       @editor.find('*').removeClass(editing_class)
       sel.removeAllRanges()
       sel.addRange newRange
@@ -269,7 +269,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       sel = window.getSelection()
       if (sel.rangeCount < 1)
           return true
-      
+
       self = @
       new_range = document.createRange()
       range = sel.getRangeAt(0)
