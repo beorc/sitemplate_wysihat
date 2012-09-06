@@ -1,17 +1,39 @@
 source "http://rubygems.org"
 
-# Declare your gem's dependencies in sitemplate_wysihat.gemspec.
-# Bundler will treat runtime dependencies like base dependencies, and
-# development dependencies will be added by default to the :development group.
 gemspec
 
 # jquery-rails is used by the dummy application
+gem 'rails', '3.2.3'
+
 gem "jquery-rails"
+gem "mysql2"
+gem "validates_existence", ">= 0.4"
+gem "devise", ">= 2.1.0"
+gem "cancan", git: 'git://github.com/ryanb/cancan.git'
+gem "rolify", ">= 3.1.0"
+gem 'simple_form'
+gem "i18n"
+gem "inherited_resources"
+gem 'kaminari'
+gem 'slim'
+gem 'jquery-rails'
 
-# Declare any dependencies that are still in development here instead of in
-# your gemspec. These might include edge Rails or gems from your path or
-# Git. Remember to move these dependencies to your gemspec before releasing
-# your gem to rubygems.org.
+group :assets do
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'uglifier', '>= 1.0.3'
+  gem "bootstrap-sass", ">= 2.0.3"
+  gem 'compass-rails'
+  gem 'compass_twitter_bootstrap', '2.0.1.2'
+end
 
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+group :test do
+  gem "factory_girl_rails", "~> 3.0"
+  gem "forgery"
+  gem 'database_cleaner'
+  gem "capybara"
+  gem "rspec-rails", git: 'git://github.com/rspec/rspec-rails.git'
+  gem "launchy", ">= 2.1.0"
+  gem 'timecop'
+  gem 'capybara-webkit'
+end

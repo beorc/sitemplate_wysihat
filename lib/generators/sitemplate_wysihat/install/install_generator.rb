@@ -5,6 +5,12 @@ class SitemplateWysihat::InstallGenerator < Rails::Generators::Base
     copy_file 'jq-wysihat.js', 'public/jq-wysihat.js'
   end
 
+  def copy_configuration
+    if 'cfg' == name || 'all' == name
+      copy_file "initializer.rb", "config/initializers/sitemplate_wysihat.rb"
+    end
+  end
+
   def add_assets
     filename = 'app/assets/javascripts/application.js'
     if File.exist? filename
