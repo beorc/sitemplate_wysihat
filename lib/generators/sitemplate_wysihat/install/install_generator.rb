@@ -6,9 +6,7 @@ class SitemplateWysihat::InstallGenerator < Rails::Generators::Base
   end
 
   def copy_configuration
-    if 'cfg' == name || 'all' == name
-      copy_file "initializer.rb", "config/initializers/sitemplate_wysihat.rb"
-    end
+    copy_file "initializer.rb", "config/initializers/sitemplate_wysihat.rb"
   end
 
   def add_assets
