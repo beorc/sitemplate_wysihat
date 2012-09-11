@@ -35,7 +35,33 @@ window.SITEMPLATE.lib.wysihat.cfg =
   HEADER_SELECTOR: 'header'
   HEADER_HEIGHT: 33
   TOP_OFFSET: 7
+  USE_SANITIZER: true
   styles: ['wysihat-framed', 'wysihat-scrollable']
+  sanitize: {
+    basic: {
+      elements: [
+       'a', 'b', 'blockquote', 'br', 'cite', 'code', 'dd', 'dl', 'dt', 'em',
+       'i', 'li', 'ol', 'p', 'pre', 'q', 'small', 'strike', 'strong', 'sub',
+       'sup', 'u', 'ul', 'div'],
+
+      attributes: {
+       'a'         : ['href'],
+       'blockquote': ['cite'],
+       'q'         : ['cite']
+      },
+
+      add_attributes: {
+       'a': {'rel': 'nofollow'}
+      },
+
+      protocols: {
+       'a'         : {'href': ['ftp', 'http', 'https', 'mailto',
+                                   Sanitize.RELATIVE]},
+       'blockquote': {'cite': ['http', 'https', Sanitize.RELATIVE]},
+       'q'         : {'cite': ['http', 'https', Sanitize.RELATIVE]}
+      }
+    }
+  }
 
   buttons: {
     undo: {
@@ -405,21 +431,26 @@ window.SITEMPLATE.lib.wysihat.cfg =
     insertHTMLHandler: (editor) ->
       value = prompt("Paste HTML", "")
       if value
-        editor.insertHTML(editor.handler.cfg.options.beforePaste(value))
+        cfg = editor.handler.cfg
+        editor.focus()
+        editor.insertHTML(cfg.options.beforePaste(cfg, value))
         editor.handler.adaptContent()
 
     saveHandler: (editor) ->
       form = editor.parents('form:first')
       form.submit()
 
-    beforePaste: (text) ->
+    beforePaste: (cfg, text) ->
       div = $('<div></div>').
         addClass('hidden wym_paste_container').
         html(text).
         appendTo($('body'))
-      $('.wym_paste_container').find('*').each () ->
-        $(@).removeAttr('class')
-        $(@).removeAttr('style')
+
+      s = new Sanitize(cfg.sanitize.basic)
+      sanitized = s.clean_node(div[0])
+      if sanitized
+        div.empty()
+        $(sanitized).appendTo(div)
 
       html = $('.wym_paste_container').html()
       $('.wym_paste_container').remove()

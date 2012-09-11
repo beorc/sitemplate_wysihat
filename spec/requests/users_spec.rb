@@ -19,7 +19,6 @@ describe "Users" do
     content = 'Test input'
     page.execute_script( "$('.editor:first').html('#{content}')" )
     find('.button.save').click
-    save_and_open_page
     find('p.first').text.should == content
   end
 end
