@@ -84,8 +84,13 @@ window.SITEMPLATE.lib.wysihat.handler =
         $(@).trigger("selection:change")
 
       @editor.bind 'paste', (e) ->
-        self.editor.find('*').each () ->
-          $(@).addClass('__before_paste__')
+        beforePaste = (node) ->
+          node.contents().each () ->
+            $(@).data('before-paste', 'true')
+            beforePaste $(@)
+
+        beforePaste(self.editor)
+
         callback = () -> self.afterPaste(self.editor)
         self.pastetimer = window.setTimeout( callback, 10);
 
@@ -374,12 +379,48 @@ window.SITEMPLATE.lib.wysihat.handler =
       $('.editor img').addClass 'selectable'
 
     afterPaste: (editor) ->
-      editor.find('*').each () ->
-        if $(@).hasClass '__before_paste__'
-          $(@).removeClass '__before_paste__'
+      cfg = editor.handler.cfg
+      markup = ''
+
+      afterPaste = (node) ->
+        markChildNodesAsViewed = (node) ->
+          node.data('before-paste', 'true')
+          node.contents().each () ->
+            $(@).data('before-paste', 'true')
+            markChildNodesAsViewed($(@))
+
+        node.contents().each () ->
+          if $(@).data('before-paste') == 'true'
+            $(@).data('before-paste', 'false')
+          else
+            if @.nodeType == 3
+              token = @.wholeText
+              token = token.replace(/^\s+/g, '')
+              token.replace(/\s+$/g, '')
+            else
+              token = @.outerHTML
+              markChildNodesAsViewed($(@))
+
+            markup = markup.concat(token)
+
+            $(@).remove()
+
+          afterPaste($(@))
+
+      afterPaste(editor)
+
+      if markup.toString().length > 0
+        markup = cfg.options.beforePaste(cfg, markup)
+
+        editor.focus()
+        range = null
+        sel = window.getSelection()
+        if (sel.rangeCount > 0)
+          range = sel.getRangeAt(0)
+          range.deleteContents()
+          range.insertNode($('<div/>').append(markup)[0])
         else
-          $(@).removeAttr('class')
-          $(@).removeAttr('style')
+          editor.insertHTML(markup)
 
       editor.handler.adaptContent()
 
