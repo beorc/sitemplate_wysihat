@@ -419,6 +419,7 @@ window.SITEMPLATE.lib.wysihat.handler =
           range = sel.getRangeAt(0)
           range.deleteContents()
           range.insertNode($('<div/>').append(markup)[0])
+          sel.removeAllRanges()
         else
           editor.insertHTML(markup)
 
