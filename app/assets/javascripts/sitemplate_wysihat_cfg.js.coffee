@@ -383,6 +383,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.handler.saveState()
         editor.handler.cfg.options.linkHandler(editor)
     }
+    ###
     html: {
       name: 'html',
       label: '<i class="icon-html"/>',
@@ -398,6 +399,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.handler.saveState()
         editor.handler.cfg.options.insertHTMLHandler(editor)
     }
+    ###
     save: {
       name: 'save',
       label: '<i class="icon-ok icon-white"/>',

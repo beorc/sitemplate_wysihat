@@ -11,6 +11,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       @editor.handler = self
       self.cfg = cfg
       self.DEFAULT_CONTENT = '<br>'
+      self.PASTE_CONTAINER_CLASS = 'sitemplate-wysihat-paste-container'
       @load()
       if @editor.html().length == 0
         self.setContent(self.DEFAULT_CONTENT)
@@ -85,12 +86,17 @@ window.SITEMPLATE.lib.wysihat.handler =
         $(@).trigger("selection:change")
 
       @editor.bind 'paste', (e) ->
-        beforePaste = (node) ->
-          node.contents().each () ->
-            $(@).data('before-paste', 'true')
-            beforePaste $(@)
-
-        beforePaste(self.editor)
+        editor.focus()
+        sel = window.getSelection()
+        if (sel.rangeCount > 0)
+          range = sel.getRangeAt(0)
+          range.deleteContents()
+          container = $('<div/>').
+                          addClass(self.PASTE_CONTAINER_CLASS)
+          marker = $('<div/>')
+          container.append marker
+          range.insertNode(container[0])
+          range.selectNode(marker[0])
 
         callback = () -> self.afterPaste(self.editor)
         self.pastetimer = window.setTimeout( callback, 10);
@@ -383,48 +389,12 @@ window.SITEMPLATE.lib.wysihat.handler =
 
     afterPaste: (editor) ->
       cfg = editor.handler.cfg
-      markup = ''
+      scope = $(".#{editor.handler.PASTE_CONTAINER_CLASS}")
 
-      afterPaste = (node) ->
-        markChildNodesAsViewed = (node) ->
-          node.data('before-paste', 'true')
-          node.contents().each () ->
-            $(@).data('before-paste', 'true')
-            markChildNodesAsViewed($(@))
-
-        node.contents().each () ->
-          if $(@).data('before-paste') == 'true'
-            $(@).data('before-paste', 'false')
-          else
-            if @.nodeType == 3
-              token = @.wholeText
-              token = token.replace(/^\s+/g, '')
-              token.replace(/\s+$/g, '')
-            else
-              token = @.outerHTML
-              markChildNodesAsViewed($(@))
-
-            markup = markup.concat(token)
-
-            $(@).remove()
-
-          afterPaste($(@))
-
-      afterPaste(editor)
-
-      if markup.toString().length > 0
-        markup = cfg.options.beforePaste(cfg, markup)
-
-        editor.focus()
-        range = null
-        sel = window.getSelection()
-        if (sel.rangeCount > 0)
-          range = sel.getRangeAt(0)
-          range.deleteContents()
-          range.insertNode($('<div/>').append(markup)[0])
-          sel.removeAllRanges()
-        else
-          editor.insertHTML(markup)
+      s = new Sanitize(cfg.sanitize.basic)
+      sanitized = s.clean_node(scope[0])
+      if sanitized
+        $(sanitized).insertBefore(scope)
+        scope.remove()
 
       editor.handler.adaptContent()
-
