@@ -25,8 +25,15 @@
 
 .wysihat-selected {@include box-shadow (rgba(blue, .2) 0 0 9px);}
 
+.error .wysihat-selected {@include box-shadow (rgba(#B94A48, .2) 0 0 9px);}
+
 .editor p {
   margin: 0;
+}
+
+.error .editor {
+  color: #B94A48;
+  border-color: #B94A48;
 }
 
 .editor_toolbar .toolbar_button {
