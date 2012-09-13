@@ -10,9 +10,10 @@ window.SITEMPLATE.lib.wysihat.handler =
       @editor = WysiHat.Editor.attach($(editor))
       @editor.handler = self
       self.cfg = cfg
+      self.DEFAULT_CONTENT = '<br>'
       @load()
       if @editor.html().length == 0
-        self.setContent('<br>')
+        self.setContent(self.DEFAULT_CONTENT)
 
       @editor.addClass 'clearfix'
 
@@ -334,7 +335,9 @@ window.SITEMPLATE.lib.wysihat.handler =
       return 'wysihat-framed' in @cfg.styles
 
     content: () ->
-      return @editor.html()
+      content = @editor.html()
+      return '' if content == @DEFAULT_CONTENT
+      return content
 
     setContent: (text) ->
       return @editor.html(text)
