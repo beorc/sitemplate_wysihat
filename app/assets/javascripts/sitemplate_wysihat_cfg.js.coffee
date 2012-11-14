@@ -32,7 +32,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
   IMAGE_ALIGN_CLASSES: ['image-left', 'image-center', 'image-right']
   INLINE_CLASSES: ['inline-left', 'inline-right']
   TOOLTIP_OPTIONS: placement: 'bottom'
-  HEADER_SELECTOR: 'header'
+  HEADER_SELECTOR: '#top-panel'
   HEADER_HEIGHT: 33
   TOP_OFFSET: 7
   USE_SANITIZER: true

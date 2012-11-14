@@ -99,7 +99,7 @@ window.SITEMPLATE.lib.wysihat.handler =
           range.selectNode(marker[0])
 
         callback = () -> self.afterPaste(self.editor)
-        self.pastetimer = window.setTimeout( callback, 10);
+        self.pastetimer = window.setTimeout( callback, 10)
 
       if self.framed()
         @editor.focus () ->
@@ -247,7 +247,7 @@ window.SITEMPLATE.lib.wysihat.handler =
       return node.hasClass class_name
 
     tagSelected: (tag) ->
-      self = this
+      self = @
       result = false
 
       sel = window.getSelection()

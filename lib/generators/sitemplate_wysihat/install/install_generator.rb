@@ -18,11 +18,11 @@ class SitemplateWysihat::InstallGenerator < Rails::Generators::Base
       end
     end
 
-    filename = 'app/assets/stylesheets/application.css'
+    filename = 'app/assets/stylesheets/application.css.scss'
     if File.exist? filename
       File.open(filename) do |io|
-        str = " *= require sitemplate_wysihat\n"
-        inject_into_file(filename, str, before: '*/') if io.grep(str).blank?
+        str = '@import "sitemplate_wysihat";'
+        append_file(filename, str) if io.grep(str).blank?
       end
     end
   end
