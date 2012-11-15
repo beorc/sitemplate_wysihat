@@ -400,20 +400,20 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.handler.cfg.options.insertHTMLHandler(editor)
     }
     ###
-    save: {
-      name: 'save',
-      label: '<i class="icon-ok icon-white"/>',
-      init: (button) ->
-        button.
-          attr('rel', 'tooltip').
-          attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.save).
-          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
-          addClass('btn btn-success')
-        group = $('<div/>').addClass('btn-group').insertBefore(button)
-        button.appendTo group
-      handler: (editor) ->
-        editor.handler.cfg.options.saveHandler(editor)
-    }
+    # save: {
+    #   name: 'save',
+    #   label: '<i class="icon-ok icon-white"/>',
+    #   init: (button) ->
+    #     button.
+    #       attr('rel', 'tooltip').
+    #       attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.save).
+    #       tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
+    #       addClass('btn btn-success')
+    #     group = $('<div/>').addClass('btn-group').insertBefore(button)
+    #     button.appendTo group
+    #   handler: (editor) ->
+    #     editor.handler.cfg.options.saveHandler(editor)
+    # }
   }
   options:
     insertImageHandler: (editor) ->
