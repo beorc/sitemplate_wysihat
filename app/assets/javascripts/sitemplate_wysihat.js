@@ -1,3 +1,4 @@
+//= require bootstrap-tooltip
 //= require sanitize
 //= require sitemplate_wysihat_local
 //= require sitemplate_wysihat_cfg
