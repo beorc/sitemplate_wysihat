@@ -1,0 +1,11 @@
+<%= remotipart_response do %>
+{
+    "id": "<%= resource.id %>",
+    "uploaded_file": {
+        "custom": {
+            "url": "<%= resource.uploaded_file.customized.url %>"
+        }
+    },
+    "update_path": "<%= resource_path(format: :json) %>"
+}
+<% end %>

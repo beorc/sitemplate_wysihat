@@ -1,8 +1,16 @@
 class SitemplateWysihat::InstallGenerator < Rails::Generators::Base
   source_root File.expand_path('../templates/', __FILE__)
 
+  def copy_migrations
+    rake "sitemplate_wysihat_engine:install:migrations"
+  end
+
   def copy_engine
     copy_file 'jq-wysihat.js', 'public/jq-wysihat.js'
+  end
+
+  def add_routes
+    route 'draw_sitemplate_wysihat_routes'
   end
 
   def copy_configuration

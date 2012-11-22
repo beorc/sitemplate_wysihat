@@ -417,9 +417,10 @@ window.SITEMPLATE.lib.wysihat.cfg =
   }
   options:
     insertImageHandler: (editor) ->
-      value = prompt("Enter image URL", "http://www.whatever.com/myimage.gif")
-      if value
-        editor.handler.insertImage(value)
+      cfg = {
+        callback: (image) -> editor.handler.insertImage(image.uploaded_file.custom.url)
+      }
+      SITEMPLATE.image_uploader.selectImage cfg
 
     linkHandler: (editor) ->
       if editor.linkSelected()

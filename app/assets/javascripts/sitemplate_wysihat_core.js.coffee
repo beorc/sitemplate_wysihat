@@ -13,6 +13,7 @@ window.SITEMPLATE.lib.wysihat.EDITOR_SELECTOR = '.sitemplate-rich-editor'
 window.SITEMPLATE.lib.wysihat.instances = []
 
 window.SITEMPLATE.lib.wysihat.attach = (editors, cfg) ->
+  SITEMPLATE.image_uploader.initSelectImageDialog()
   editors.each (i, editor) ->
     handler = new SITEMPLATE.lib.wysihat.handler.EditorHandler(editor, cfg)
     SITEMPLATE.lib.wysihat.instances.push(handler)

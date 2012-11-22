@@ -17,6 +17,8 @@ gem "inherited_resources"
 gem 'kaminari'
 gem 'slim'
 gem 'jquery-rails'
+gem 'rmagick'
+gem 'carrierwave'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
