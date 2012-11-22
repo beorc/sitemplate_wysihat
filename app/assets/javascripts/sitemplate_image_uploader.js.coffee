@@ -16,10 +16,14 @@ FromHDDTab =
   clearPreview: () ->
     $("#from-hdd .selected-file-preivew img").each () ->
       $(@).remove() unless $(@).hasClass 'image-loader'
+  clearErrors: () ->
+    $('#select-image-dialog .control-group').removeClass('error')
+    $('#select-image-dialog .controls span.help-inline').remove()
   reset: () ->
     FromHDDTab.uploadedImage = null
     $("#from-hdd form")[0].reset()
     FromHDDTab.clearPreview()
+    FromHDDTab.clearErrors()
     FromHDDTab.hideImageLoader()
     dialogSelectButton().unbind('click')
 
@@ -32,6 +36,7 @@ FromHDDTab =
 
     $('#from-hdd form').bind 'ajax:before', (xhr) ->
       FromHDDTab.clearPreview()
+      FromHDDTab.clearErrors()
       FromHDDTab.showImageLoader()
     $('#from-hdd form').bind 'ajax:complete', (xhr, data) ->
       FromHDDTab.hideImageLoader()
@@ -47,10 +52,21 @@ FromHDDTab =
       FromHDDTab.uploadedImage = response
 
       if data.status == 200
-        imgEl = $("<img></img>").attr('src', response.uploaded_file.custom.url)
+        imgEl = $("<img></img>").attr('src', response.uploaded_file.thumb.url)
         $("#from-hdd .selected-file-preivew").append imgEl
       else
-        alert data.responseText
+        if response.width
+          $('#select-image-dialog .width .control-group').addClass('error')
+        if response.height
+          $('#select-image-dialog .height .control-group').addClass('error')
+        if response.uploaded_file
+          control_group = $('#select-image-dialog .uploaded_file .control-group')
+          control_group.addClass('error')
+          controls = control_group.find('.controls')
+          $('<span/>').
+            addClass('help-inline').
+            text(response.uploaded_file[0]).
+            appendTo(controls)
 
     $('#custom_image_uploaded_file').change () ->
       $('#select-image-dialog #from-hdd form').submit()

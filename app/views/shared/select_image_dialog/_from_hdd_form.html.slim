@@ -1,15 +1,15 @@
-= simple_form_for CustomImage.new, remote: true, format: :json, html: { multipart: true } do |f|
+= simple_form_for CustomImage.new, remote: true, format: :json, html: { multipart: true, class: 'form-horizontal' } do |f|
   fieldset
     .selected-file-preivew
-      = image_tag 'ajax-loader.gif', input_html: {class: 'image-loader'}
-    = f.input :uploaded_file, as: :file, input_html: { class: 'input-file' }
+      = image_tag 'ajax-loader.gif', class: 'image-loader'
 
-    = f.label :dimensions
-    = f.text_field :width
-    '&nbsp
-    span x
-    '&nbsp
-    = f.text_field :height
-    '&nbsp
-    span px
+    hr
+    .width
+      = f.input :width, input_html: { class: 'width' }
+    .height
+      = f.input :height, input_html: { class: 'height' }
+
+    .uploaded_file
+      = f.input :uploaded_file, as: :file, input_html: { class: 'input-file' }
+
 
