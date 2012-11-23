@@ -1,7 +1,7 @@
 require 'simple_form'
 require 'bootstrap-sass'
 require 'remotipart'
-require 'rmagick'
+require 'RMagick'
 require 'carrierwave'
 
 module SitemplateWysihat
