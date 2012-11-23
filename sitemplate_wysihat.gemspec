@@ -20,5 +20,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'bootstrap-sass'
   s.add_dependency 'remotipart'
   s.add_dependency 'rmagick'
-  s.add_dependency 'carrierwave', '0.5.4'
 end
