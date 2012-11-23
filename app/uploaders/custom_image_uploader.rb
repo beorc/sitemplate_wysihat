@@ -56,6 +56,7 @@ class CustomImageUploader < CarrierWave::Uploader::Base
   end
 
   def customize
+    return if model.width.to_i <= 0 || model.height.to_i <= 0
     manipulate! do |img|
       img.resize_to_fit!(model.width.to_i, model.height.to_i)
     end

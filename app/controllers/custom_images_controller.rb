@@ -7,14 +7,12 @@ class CustomImagesController < InheritedResources::Base
   def create
     @custom_image  = CustomImage.new
 
-    @custom_image.width = params[:custom_image][:width]
-    @custom_image.height = params[:custom_image][:height]
+    @custom_image.width = params[:custom_image][:width].to_i
+    @custom_image.height = params[:custom_image][:height].to_i
 
-    if @custom_image.valid?
-      @custom_image.uploaded_file = params[:custom_image][:uploaded_file]
-      @custom_image.save
-    end
-    unless @custom_image.valid?
+    @custom_image.uploaded_file = params[:custom_image][:uploaded_file]
+
+    unless @custom_image.save
       render json: @custom_image.errors.messages, status: 500
     end
   end
