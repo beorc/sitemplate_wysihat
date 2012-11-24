@@ -3,25 +3,25 @@ window.SITEMPLATE = {} unless window.SITEMPLATE
 window.SITEMPLATE.image_uploader = {} unless window.SITEMPLATE.image_uploader
 
 dialogSelectButton = () ->
-  $('#select-image-dialog > .modal-footer > a.select')
+  $('#sitemplate-image-selection-dialog > .modal-footer > a.select')
 
 # Объект содержит логику работы с табом загрузки с жесткого диска.
 # Предназначен исключительно для структурирования кода.
 FromHDDTab =
   # Показать и скрыть вращающийся индикатор загрузки изображения.
   showImageLoader: () ->
-    $('#from-hdd img.image-loader').show()
+    $('#sitemplate-image-selection-dialog img.image-loader').show()
   hideImageLoader: () ->
-    $('#from-hdd img.image-loader').hide()
+    $('#sitemplate-image-selection-dialog img.image-loader').hide()
   clearPreview: () ->
-    $("#from-hdd .selected-file-preivew img").each () ->
+    $("#sitemplate-image-selection-dialog .selected-file-preivew img").each () ->
       $(@).remove() unless $(@).hasClass 'image-loader'
   clearErrors: () ->
-    $('#select-image-dialog .control-group').removeClass('error')
-    $('#select-image-dialog .controls span.help-inline').remove()
+    $('#sitemplate-image-selection-dialog .control-group').removeClass('error')
+    $('#sitemplate-image-selection-dialog .controls span.help-inline').remove()
   reset: () ->
     FromHDDTab.uploadedImage = null
-    $("#from-hdd form")[0].reset()
+    $("#sitemplate-image-selection-dialog form")[0].reset()
     FromHDDTab.clearPreview()
     FromHDDTab.clearErrors()
     FromHDDTab.hideImageLoader()
@@ -31,14 +31,14 @@ FromHDDTab =
   # начало и окончание ajax-запроса, чтобы показать лоадер и заполнить
   # превью в случае успешной загрузки изображения.
   init: () ->
-    $('#from-hdd .selected-file-preivew').click () ->
+    $('#sitemplate-image-selection-dialog .selected-file-preivew').click () ->
       $('#custom_image_uploaded_file').click()
 
-    $('#from-hdd form').bind 'ajax:before', (xhr) ->
+    $('#sitemplate-image-selection-dialog form').bind 'ajax:before', (xhr) ->
       FromHDDTab.clearPreview()
       FromHDDTab.clearErrors()
       FromHDDTab.showImageLoader()
-    $('#from-hdd form').bind 'ajax:complete', (xhr, data) ->
+    $('#sitemplate-image-selection-dialog form').bind 'ajax:complete', (xhr, data) ->
       FromHDDTab.hideImageLoader()
       response = $.parseJSON data.responseText
 
@@ -53,14 +53,14 @@ FromHDDTab =
 
       if data.status == 200
         imgEl = $("<img></img>").attr('src', response.uploaded_file.thumb.url)
-        $("#from-hdd .selected-file-preivew").append imgEl
+        $("#sitemplate-image-selection-dialog .selected-file-preivew").append imgEl
       else
         if response.width
-          $('#select-image-dialog .width .control-group').addClass('error')
+          $('#sitemplate-image-selection-dialog .width .control-group').addClass('error')
         if response.height
-          $('#select-image-dialog .height .control-group').addClass('error')
+          $('#sitemplate-image-selection-dialog .height .control-group').addClass('error')
         if response.uploaded_file
-          control_group = $('#select-image-dialog .uploaded_file .control-group')
+          control_group = $('#sitemplate-image-selection-dialog .uploaded_file .control-group')
           control_group.addClass('error')
           controls = control_group.find('.controls')
           $('<span/>').
@@ -69,12 +69,12 @@ FromHDDTab =
             appendTo(controls)
 
     $('#custom_image_uploaded_file').change () ->
-      $('#select-image-dialog #from-hdd form').submit()
+      $('#sitemplate-image-selection-dialog form').submit()
 
 window.SITEMPLATE.image_uploader.initSelectImageDialog = () ->
-  return if $("#select-image-dialog").size() == 0
-  $('#select-image-dialog > .modal-footer > a.cancel').click () ->
-    $("#select-image-dialog").modal('hide')
+  return if $("#sitemplate-image-selection-dialog").size() == 0
+  $('#sitemplate-image-selection-dialog > .modal-footer > a.cancel').click () ->
+    $("#sitemplate-image-selection-dialog").modal('hide')
     false
 
   FromHDDTab.init()
@@ -91,8 +91,8 @@ window.SITEMPLATE.image_uploader.selectImage = (cfg) ->
 
   dialogSelectButton().click () ->
     cfg.callback(FromHDDTab.uploadedImage)
-    $("#select-image-dialog").modal('hide')
+    $("#sitemplate-image-selection-dialog").modal('hide')
     false
 
-  $("#select-image-dialog").removeClass('hide')
-  $("#select-image-dialog").modal('show')
+  $("#sitemplate-image-selection-dialog").removeClass('hide')
+  $("#sitemplate-image-selection-dialog").modal('show')

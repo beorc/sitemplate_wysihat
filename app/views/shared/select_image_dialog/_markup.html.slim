@@ -1,13 +1,11 @@
-#select-image-dialog[class='modal fade hide']
+#sitemplate-image-selection-dialog[class='modal fade hide']
   .modal-header
     a.close[href='#' data-dismiss="modal"] x
     h3 = t("select_image_dialog.title")
   .modal-body
-    .pill-content
-      #from-hdd[class='active']
-        = render partial: 'shared/select_image_dialog/from_hdd_form', formats: [:html]
-      #from-url
-      #from-galleries
+    .selected-file-preivew
+      = image_tag 'ajax-loader.gif', class: 'image-loader'
+    = render partial: 'shared/select_image_dialog/form', formats: [:html]
   .modal-footer
     a.btn.cancel[href='#'] = t(:cancel)
     a.btn.btn-primary.select[href='#' data-dismiss="modal"] = t("select_image_dialog.select_button")

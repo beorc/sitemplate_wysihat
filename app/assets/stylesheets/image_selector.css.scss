@@ -1,9 +1,9 @@
-#select-image-dialog {
+#sitemplate-image-selection-dialog {
     width: 500px;
     margin-left: -250px;
     left: 50%;
 
-    height: 420px;
+    height: 280px;
     top: 50%;
     margint-top: -160px;
 
@@ -21,41 +21,41 @@
     }
 
     .modal-body {
-        height: 280px;
-        #from-hdd {
-            #gallery_image_title {
-                width: 300px;
-            }
-            .selected-file-preivew {
-                width: 160px;
-                height: 120px;
-                line-height: 120px;
-                border: solid 1px #DDD;
-                text-align: center;
-                padding: 5px;
+        height: 150px;
+        .selected-file-preivew {
+            width: 160px;
+            height: 120px;
+            line-height: 120px;
+            border: solid 1px #DDD;
+            text-align: center;
+            padding: 5px;
+            float: left;
 
-                // Что-то странное скопипастено из bootstrap
-                -webkit-border-radius: 4px;
-                -moz-border-radius: 4px;
-                -ms-border-radius: 4px;
-                -o-border-radius: 4px;
-                border-radius: 4px;
-                -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-                -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-            }
+            // Что-то странное скопипастено из bootstrap
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            -o-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+            -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+        }
+        form#new_custom_image {
+            float: left;
+            margin-left: 10px;
             #custom_image_width, #custom_image_height {
               width: 50px;
             }
-            .control-label {
-              width: 70px;
-            }
-            .controls {
-              margin-left: 100px;
-            }
+            //.control-label {
+              //width: 70px;
+            //}
+            //.controls {
+              //margin-left: 100px;
+            //}
             .width { float: left; }
-            .height label { margin-left: 10px; }
-            input.height { margin-left: 30px; }
+            .height .control-group { margin-left: 90px; }
+            //input.height { margin-left: 30px; }
         }
     }
 }

@@ -1,9 +1,8 @@
-= simple_form_for CustomImage.new, remote: true, format: :json, html: { multipart: true, class: 'form-horizontal' } do |f|
+= simple_form_for CustomImage.new,
+                  remote: true,
+                  format: :json,
+                  html: { multipart: true } do |f|
   fieldset
-    .selected-file-preivew
-      = image_tag 'ajax-loader.gif', class: 'image-loader'
-
-    hr
     .width
       = f.input :width, input_html: { class: 'width' }
     .height
