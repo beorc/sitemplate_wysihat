@@ -8,5 +8,12 @@ class ::SimpleForm::FormBuilder
   end
 end
 
+module ::SimpleForm::ActionViewExtensions::FormHelper
+  def simple_form_for_with_wysihat(record, options={}, &block)
+    content = render_image_selector
+    content << simple_form_for(record, options, &block)
+  end
+end
+
 CarrierWave::SanitizedFile.sanitize_regexp = /[^[:word:]\.\-\+]/
 
