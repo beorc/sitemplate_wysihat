@@ -7,6 +7,6 @@
       = image_tag 'ajax-loader.gif', class: 'image-loader'
     = render partial: 'shared/select_image_dialog/form', formats: [:html]
   .modal-footer
-    a.btn.cancel[href='#'] = t(:cancel)
     a.btn.btn-primary.select[href='#' data-dismiss="modal"] = t("select_image_dialog.select_button")
+    a.btn.cancel[href='#'] = t(:cancel)
 
