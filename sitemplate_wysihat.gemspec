@@ -17,6 +17,5 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency 'simple_form'
-  s.add_dependency 'remotipart'
   s.add_dependency 'rmagick'
 end

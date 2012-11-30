@@ -34,43 +34,43 @@ FromHDDTab =
     $('#sitemplate-image-selection-dialog .selected-file-preivew').click () ->
       $('#custom_image_uploaded_file').click()
 
-    $('#sitemplate-image-selection-dialog form').bind 'ajax:before', (xhr) ->
-      FromHDDTab.clearPreview()
-      FromHDDTab.clearErrors()
-      FromHDDTab.showImageLoader()
-    $('#sitemplate-image-selection-dialog form').bind 'ajax:complete', (xhr, data) ->
-      FromHDDTab.hideImageLoader()
-      response = $.parseJSON data.responseText
-
-      # Кешируем информацию о загруженной картинке, для того, чтобы
-      # сделать обновление параметров после того, как пользователь жмет
-      # кнопку "Выбрать".
-      # В один момент времени мы работаем только с одним диалогом и с одной
-      # картинкой, так что если на странице используется несколько диалогов
-      # для разных целей проблем быть не должно: FromHDDTab.uploadedImage
-      # будет запоминаться текущим диалогом и не будет перетираться.
-      FromHDDTab.uploadedImage = response
-
-      if data.status == 200
-        imgEl = $("<img></img>").attr('src', response.uploaded_file.thumb.url)
-        $("#sitemplate-image-selection-dialog .selected-file-preivew").append imgEl
-      else
-        if response.width
-          $('#sitemplate-image-selection-dialog .width .control-group').addClass('error')
-        if response.height
-          $('#sitemplate-image-selection-dialog .height .control-group').addClass('error')
-        if response.uploaded_file
-          control_group = $('#sitemplate-image-selection-dialog .uploaded_file .control-group')
-          control_group.addClass('error')
-          controls = control_group.find('.controls')
-          $('<span/>').
-            addClass('help-inline').
-            text(response.uploaded_file[0]).
-            appendTo(controls)
-
     $('#custom_image_uploaded_file').change () ->
-      $('#sitemplate-image-selection-dialog form').submit()
+      $('#sitemplate-image-selection-dialog form').ajaxSubmit(
+        beforeSubmit: (a,f,o) ->
+          o.dataType = 'json'
+          FromHDDTab.clearPreview()
+          FromHDDTab.clearErrors()
+          FromHDDTab.showImageLoader()
+        complete: (xhr, status) ->
+          FromHDDTab.hideImageLoader()
+          response = $.parseJSON xhr.responseText
 
+          # Кешируем информацию о загруженной картинке, для того, чтобы
+          # сделать обновление параметров после того, как пользователь жмет
+          # кнопку "Выбрать".
+          # В один момент времени мы работаем только с одним диалогом и с одной
+          # картинкой, так что если на странице используется несколько диалогов
+          # для разных целей проблем быть не должно: FromHDDTab.uploadedImage
+          # будет запоминаться текущим диалогом и не будет перетираться.
+          FromHDDTab.uploadedImage = response
+
+          if xhr.status == 200
+            imgEl = $("<img></img>").attr('src', response.uploaded_file.thumb.url)
+            $("#sitemplate-image-selection-dialog .selected-file-preivew").append imgEl
+          else
+            if response.width
+              $('#sitemplate-image-selection-dialog .width .control-group').addClass('error')
+            if response.height
+              $('#sitemplate-image-selection-dialog .height .control-group').addClass('error')
+            if response.uploaded_file
+              control_group = $('#sitemplate-image-selection-dialog .uploaded_file .control-group')
+              control_group.addClass('error')
+              controls = control_group.find('.controls')
+              $('<span/>').
+                addClass('help-inline').
+                text(response.uploaded_file[0]).
+                appendTo(controls)
+       )
 window.SITEMPLATE.image_uploader.initSelectImageDialog = () ->
   return if $("#sitemplate-image-selection-dialog").size() == 0
   $('#sitemplate-image-selection-dialog > .modal-footer > a.cancel').click () ->

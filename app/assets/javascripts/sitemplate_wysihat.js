@@ -1,6 +1,6 @@
 //= require bootstrap-tooltip
+//= require jquery.form
 //= require sitemplate_image_uploader
-//= require jquery.remotipart
 //= require sanitize
 //= require sitemplate_wysihat_local
 //= require sitemplate_wysihat_cfg
