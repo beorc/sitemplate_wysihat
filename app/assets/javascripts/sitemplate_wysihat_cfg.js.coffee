@@ -334,40 +334,6 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.handler.saveState()
         editor.handler.cfg.options.insertImageHandler(editor)
     }
-    ###
-    inline_left: {
-      name: 'inline_left',
-      label: '<i class="icon-pull-left"/>',
-      init: (button) ->
-        button.
-          attr('rel', 'tooltip').
-          attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.inline.left).
-          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
-          addClass('btn btn-small')
-        group = button.prevAll('.btn-group:first')
-        button.appendTo group
-      handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
-      query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
-    }
-    inline_right: {
-      name: 'inline_right',
-      label: '<i class="icon-pull-right"/>',
-      init: (button) ->
-        button.
-          attr('rel', 'tooltip').
-          attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.inline.right).
-          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
-          addClass('btn btn-small')
-        group = button.prevAll('.btn-group:first')
-        button.appendTo group
-      handler: (editor) ->
-        window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
-      query: (editor) ->
-        window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
-    }
-    ###
     link: {
       name: 'link',
       label: '<i class="icon-link"/>',
@@ -383,37 +349,6 @@ window.SITEMPLATE.lib.wysihat.cfg =
         editor.handler.saveState()
         editor.handler.cfg.options.linkHandler(editor)
     }
-    ###
-    html: {
-      name: 'html',
-      label: '<i class="icon-html"/>',
-      init: (button) ->
-        button.
-          attr('rel', 'tooltip').
-          attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.html).
-          tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
-          addClass('btn btn-small')
-        group = $('<div/>').addClass('btn-group').insertBefore(button)
-        button.appendTo group
-      handler: (editor) ->
-        editor.handler.saveState()
-        editor.handler.cfg.options.insertHTMLHandler(editor)
-    }
-    ###
-    # save: {
-    #   name: 'save',
-    #   label: '<i class="icon-ok icon-white"/>',
-    #   init: (button) ->
-    #     button.
-    #       attr('rel', 'tooltip').
-    #       attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.save).
-    #       tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
-    #       addClass('btn btn-success')
-    #     group = $('<div/>').addClass('btn-group').insertBefore(button)
-    #     button.appendTo group
-    #   handler: (editor) ->
-    #     editor.handler.cfg.options.saveHandler(editor)
-    # }
   }
   options:
     insertImageHandler: (editor) ->
@@ -458,5 +393,68 @@ window.SITEMPLATE.lib.wysihat.cfg =
       html = $('.wym_paste_container').html()
       $('.wym_paste_container').remove()
       html
+
+    buttons:
+      inline_left: {
+        name: 'inline_left',
+        label: '<i class="icon-pull-left"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.inline.left).
+            tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
+        handler: (editor) ->
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
+        query: (editor) ->
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 0)
+      }
+      inline_right: {
+        name: 'inline_right',
+        label: '<i class="icon-pull-right"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.inline.right).
+            tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
+            addClass('btn btn-small')
+          group = button.prevAll('.btn-group:first')
+          button.appendTo group
+        handler: (editor) ->
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.handler(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
+        query: (editor) ->
+          window.SITEMPLATE.lib.wysihat.helpers.toggle_class.query(editor, window.SITEMPLATE.lib.wysihat.cfg.INLINE_CLASSES, 1)
+      }
+      html: {
+        name: 'html',
+        label: '<i class="icon-html"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.html).
+            tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
+            addClass('btn btn-small')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
+        handler: (editor) ->
+          editor.handler.saveState()
+          editor.handler.cfg.options.insertHTMLHandler(editor)
+      }
+      save: {
+        name: 'save',
+        label: '<i class="icon-ok icon-white"/>',
+        init: (button) ->
+          button.
+            attr('rel', 'tooltip').
+            attr('data-original-title', window.SITEMPLATE.lib.wysihat.local.getLocale().toolbar.save).
+            tooltip(window.SITEMPLATE.lib.wysihat.cfg.TOOLTIP_OPTIONS).
+            addClass('btn btn-success')
+          group = $('<div/>').addClass('btn-group').insertBefore(button)
+          button.appendTo group
+        handler: (editor) ->
+          editor.handler.cfg.options.saveHandler(editor)
+      }
 
 
