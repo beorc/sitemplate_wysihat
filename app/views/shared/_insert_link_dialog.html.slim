@@ -1,0 +1,25 @@
+#sitemplate-insert-link-dialog[class='modal fade hide']
+  .modal-header
+    a.close[href='#' data-dismiss="modal"] x
+    h3 = t("select_link_dialog.title")
+  .modal-body
+    .form-horizontal
+      .control-group
+        label.control-label*{ for: 'url' }
+          = t('select_link_dialog.labels.url')
+        .controls
+          = text_field_tag :url
+      .control-group
+        label.control-label*{ for: 'content' }
+          = t('select_link_dialog.labels.content')
+        .controls
+          = text_field_tag :content
+      .control-group
+        label.control-label*{ for: 'open_in_new_window' }
+          = t('select_link_dialog.labels.open_in_new_window')
+        .controls
+          = check_box_tag :open_in_new_window, nil, true
+  .modal-footer
+    a.btn.btn-primary.select[href='#' data-dismiss="modal"] = t("select_link_dialog.select_button")
+    a.btn.cancel[href='#'] = t(:cancel)
+

@@ -5,11 +5,9 @@ class CustomImage < ActiveRecord::Base
   validates :uploaded_file, presence: true,
                             file_size: { maximum: 10.megabytes }
 
-  [:width, :height].each do |dimension|
-    validates dimension, presence: true,
-                         numericality: { only_integer: true,
-                                         greater_than: 0 }
-  end
+  validates :width, :height, presence: true,
+                             numericality: { only_integer: true,
+                                             greater_than: 0 }
   after_initialize :assign_default_geometry
 
   attr_accessible :uploaded_file, :width, :height

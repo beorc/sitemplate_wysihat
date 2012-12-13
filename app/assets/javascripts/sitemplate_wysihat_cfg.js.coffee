@@ -45,7 +45,7 @@ window.SITEMPLATE.lib.wysihat.cfg =
        'sup', 'u', 'ul', 'div'],
 
       attributes: {
-       'a'         : ['href'],
+       'a'         : ['href', 'target'],
        'blockquote': ['cite'],
        'q'         : ['cite']
       },
@@ -362,15 +362,29 @@ window.SITEMPLATE.lib.wysihat.cfg =
         if confirm("Remove link?")
           editor.unlinkSelection()
       else
-        value = prompt("Enter a URL", "")
-        if value
-          editor.linkSelection(value)
+        cfg = {
+          callback: () ->
+            if @.url
+              linkEl = $('<a/>').
+                          attr('href', @.url).
+                          text(@.content)
+              if @.open_in_new_window
+                linkEl.attr('target', '_blank')
+
+              handlerCfg = editor.handler.cfg
+              html = linkEl[0].outerHTML
+
+              editor.handler.restoreSelection()
+              editor.handler.pasteHtmlAtCaret(handlerCfg.options.beforePaste(handlerCfg, html))
+        }
+        editor.handler.saveSelection()
+        SITEMPLATE.link_selector.selectLink cfg
 
     insertHTMLHandler: (editor) ->
       value = prompt("Paste HTML", "")
       if value
         cfg = editor.handler.cfg
-        editor.focus()
+        editor.handler.restoreSelection()
         editor.insertHTML(cfg.options.beforePaste(cfg, value))
         editor.handler.adaptContent()
 

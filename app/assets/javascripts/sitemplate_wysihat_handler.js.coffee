@@ -86,7 +86,7 @@ window.SITEMPLATE.lib.wysihat.handler =
         $(@).trigger("selection:change")
 
       @editor.bind 'paste', (e) ->
-        editor.focus()
+        @restoreSelection()
         sel = window.getSelection()
         if (sel.rangeCount > 0)
           range = sel.getRangeAt(0)
@@ -121,7 +121,7 @@ window.SITEMPLATE.lib.wysihat.handler =
         }
 
     insertImage: (url) ->
-      @editor.focus()
+      @restoreSelection()
       @editor.insertImage(url)
       @adaptContent()
       return false
@@ -336,6 +336,56 @@ window.SITEMPLATE.lib.wysihat.handler =
 
       return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 &&
              range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1
+
+    pasteHtmlAtCaret: (html) ->
+      if (window.getSelection)
+        # IE9 and non-IE
+        sel = window.getSelection()
+        if (sel.getRangeAt && sel.rangeCount)
+          range = sel.getRangeAt(0)
+          range.deleteContents()
+
+          # Range.createContextualFragment() would be useful here but is
+          # non-standard and not supported in all browsers (IE9, for one)
+          el = document.createElement("div")
+          el.innerHTML = html
+          frag = document.createDocumentFragment()
+          while ( (node = el.firstChild) )
+            lastNode = frag.appendChild(node)
+
+          range.insertNode(frag)
+
+          # Preserve the selection
+          if (lastNode)
+            range = range.cloneRange()
+            range.setStartAfter(lastNode)
+            range.collapse(true)
+            sel.removeAllRanges()
+            sel.addRange(range)
+      else if (document.selection && document.selection.type != "Control")
+        # IE < 9
+        document.selection.createRange().pasteHTML(html);
+
+    saveSelection: () ->
+      if(window.getSelection) # non IE Browsers
+        @savedRange = window.getSelection().getRangeAt(0)
+      else if(document.selection) #IE
+        @savedRange = document.selection.createRange()
+
+    restoreSelection: () ->
+      @editor.focus()
+      if (@savedRange != null)
+        if (window.getSelection) #non IE and there is already a selection
+          s = window.getSelection()
+          if (s.rangeCount > 0)
+              s.removeAllRanges()
+          s.addRange(@savedRange)
+        else
+          if (document.createRange) #non IE and no selection
+            window.getSelection().addRange(@savedRange)
+          else
+            if (document.selection) #IE
+                @savedRange.select()
 
     framed: () ->
       return 'wysihat-framed' in @cfg.styles

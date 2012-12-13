@@ -1,4 +1,12 @@
 ru:
+  select_link_dialog:
+    title: Вставка ссылки
+    select_button: Вставить
+    labels:
+      url: URL
+      content: Текст ссылки
+      open_in_new_window: Открывать в новом окне
+
   select_image_dialog:
     title: Выберите изображение
     select_button: Выбрать
