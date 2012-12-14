@@ -5,18 +5,15 @@
   .modal-body
     .form-horizontal
       .control-group
-        label.control-label*{ for: 'url' }
-          = t('select_link_dialog.labels.url')
+        label.control-label*{ for: 'url' } = t('select_link_dialog.labels.url')
         .controls
           = text_field_tag :url
       .control-group
-        label.control-label*{ for: 'content' }
-          = t('select_link_dialog.labels.content')
+        label.control-label*{ for: 'content' } = t('select_link_dialog.labels.content')
         .controls
           = text_field_tag :content
       .control-group
-        label.control-label*{ for: 'open_in_new_window' }
-          = t('select_link_dialog.labels.open_in_new_window')
+        label.control-label*{ for: 'open_in_new_window' } = t('select_link_dialog.labels.open_in_new_window')
         .controls
           = check_box_tag :open_in_new_window, nil, true
   .modal-footer

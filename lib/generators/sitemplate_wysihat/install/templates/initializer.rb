@@ -1,3 +1,6 @@
+SitemplateWysihat.setup do |config|
+end
+
 class ::SimpleForm::FormBuilder
   def sitemplate_wysihat(attribute_name, options = {}, &block)
     options[:as] = :text
