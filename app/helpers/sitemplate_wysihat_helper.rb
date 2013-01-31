@@ -10,6 +10,8 @@ module SitemplateWysihatHelper
   def simple_form_for(record, options={}, &block)
     return super if options[:wysihat].blank?
 
+    options.delete :wysihat
+
     content = render_image_selector
     content << render_link_selector
     content << super
