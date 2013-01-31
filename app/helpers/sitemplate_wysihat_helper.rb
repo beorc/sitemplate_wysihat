@@ -6,5 +6,13 @@ module SitemplateWysihatHelper
   def render_link_selector
     render partial: 'shared/insert_link_dialog', formats: [:html]
   end
+
+  def simple_form_for(record, options={}, &block)
+    return super if options[:wysihat].blank?
+
+    content = render_image_selector
+    content << render_link_selector
+    content << super
+  end
 end
 
