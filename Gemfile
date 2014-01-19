@@ -17,7 +17,6 @@ gem "inherited_resources"
 gem 'kaminari'
 gem 'slim'
 gem 'jquery-rails'
-gem 'rmagick'
 gem 'carrierwave'
 
 group :assets do
